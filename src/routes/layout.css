@@ -1,2 +1,90 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+@theme {
+  /* Surfaces */
+  --color-page: var(--bg-page);
+  --color-surface: var(--bg-surface);
+  --color-surface-brighter: var(--bg-surface-brighter);
+
+  /* Text */
+  --color-content: var(--text-main);
+  --color-content-muted: var(--text-muted);
+  --color-content-inverse: var(--text-inverse);
+
+  /* Branding & Interactive */
+  --color-primary: var(--brand);
+  --color-primary-hover: var(--brand-hover);
+
+  /* Borders & Lines */
+  --color-line-dim: var(--border-dim);
+  --color-line-bold: var(--border-bold);
+}
+
+/* 2. COLOR VARIABLES (OKLCH)
+*/
+:root {
+  /* --- LIGHT THEME (Default) --- */
+  --bg-page: oklch(99% 0.01 300);            /* Faint purple tint */
+  --bg-surface: oklch(96% 0.01 300);        
+  --bg-surface-brighter: oklch(100% 0 0);  
+
+  --text-main: oklch(25% 0.02 300);       
+  --text-muted: oklch(55% 0.03 300);     
+  --text-inverse: oklch(99% 0.01 300);     
+
+  /* COOL PURPLE */
+  --brand: oklch(60% 0.18 300);            
+  --brand-hover: oklch(55% 0.18 300);    
+
+  --border-dim: oklch(90% 0.02 300);    
+  --border-bold: oklch(80% 0.04 300);  
+}
+
+[data-theme='dark'] {
+  /* --- DARK THEME --- */
+  --bg-page: oklch(18% 0.02 300);     
+  --bg-surface: oklch(22% 0.03 300); 
+  --bg-surface-brighter: oklch(28% 0.03 300);
+
+  --text-main: oklch(94% 0.01 300); 
+  --text-muted: oklch(75% 0.02 300);        
+  --text-inverse: oklch(18% 0.02 300);     
+
+  /* VIBRANT PURPLE FOR DARK MODE */
+  --brand: oklch(72% 0.15 300);            
+  --brand-hover: oklch(78% 0.15 300);    
+
+  --border-dim: oklch(28% 0.04 300);
+  --border-bold: oklch(35% 0.06 300);
+}
+
+[data-theme='sepia'] {
+  /* --- SEPIA THEME --- */
+  --bg-page: oklch(94% 0.03 70);        
+  --bg-surface: oklch(90% 0.04 70);    
+  --bg-surface-brighter: oklch(96% 0.03 70);
+
+  --text-main: oklch(28% 0.05 50);    
+  --text-muted: oklch(50% 0.06 60);  
+  --text-inverse: oklch(96% 0.03 70);
+
+  /* MUTED PURPLE/AMETHYST FOR SEPIA */
+  --brand: oklch(50% 0.10 70);      
+  --brand-hover: oklch(45% 0.10 70);
+
+  --border-dim: oklch(85% 0.06 70);
+  --border-bold: oklch(75% 0.08 70);
+}
+
+/* 3. BASE STYLES
+*/
+@layer base {
+  body {
+    @apply bg-page text-content transition-colors duration-100 antialiased;
+  }
+
+  * {
+    @apply border-line-dim;
+  }
+}
