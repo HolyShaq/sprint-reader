@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import { X } from "@lucide/svelte";
+    import { fade } from "svelte/transition";
 
 	interface Props {
+		text: string;
 		onBack: () => void;
 	}
-	let { onBack } = $props();
+	let { text, onBack }: Props = $props();
+
+	let textIndex = $state(0);
+	const textArray = $derived(text.trim().split(/\s+/));
+	const currentWord = $derived(textArray[textIndex] ?? "");
 </script>
 
-<div class="relative inset-0">
+<div transition:fade={{ duration: 100 }} class="relative w-screen h-screen">
 	<Button
 		onclick={onBack}
 		size="icon"
@@ -16,4 +22,10 @@
 	>
 		<X class="size-12" />
 	</Button>
+
+	<h1
+		class="text-9xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -translate-x-100 -translate-y-24"
+	>
+		{currentWord}
+	</h1>
 </div>

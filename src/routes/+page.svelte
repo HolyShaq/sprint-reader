@@ -9,5 +9,5 @@
 {#if mode === "input"}
 	<InputPage bind:text onSubmit={() => (mode = "read")} />
 {:else if mode === "read"}
-	<ReadPage onBack={() => (mode = "input")} />
+	<ReadPage {text} onBack={() => (mode = "input")} />
 {/if}
