@@ -1,11 +1,18 @@
-<script>
+<script lang="ts">
 	import ModeToggle from "$lib/components/ModeToggle.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import Slider from "$lib/components/ui/slider/slider.svelte";
 	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
 	import { Menu } from "@lucide/svelte";
+	import { cubicOut } from "svelte/easing";
+	import { fade, fly } from "svelte/transition";
 
-	let { text = $bindable() } = $props();
+	interface Props {
+		text: string;
+		onSubmit: () => void;
+	}
+	let { text = $bindable(), onSubmit }: Props = $props();
+
 	let wpm = $state(300);
 </script>
 
@@ -13,6 +20,7 @@
 	<!-- Main Content -->
 	<div class="flex-grow flex justify-center items-center">
 		<div
+			transition:fly={{ duration: 180, y: 16, easing: cubicOut }}
 			class="w-full max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
 		>
 			<div class="flex items-center justify-between">
@@ -37,13 +45,16 @@
 					/>
 					<span class="whitespace-nowrap">{wpm} wpm</span>
 				</div>
-				<Button>Submit</Button>
+				<Button onclick={onSubmit}>Submit</Button>
 			</div>
 		</div>
 	</div>
 
 	<!-- Footer -->
-	<div class="flex items-center justify-end gap-4 px-4 py-2">
+	<div
+		transition:fade={{ duration: 100 }}
+		class="flex items-center justify-end gap-4 px-4 py-2"
+	>
 		<span>Made by HolyShaq</span>
 		<div class="h-full w-px bg-border"></div>
 		<span
