@@ -1,20 +1,38 @@
 <script>
 	import ModeToggle from "$lib/components/ModeToggle.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
+	import Slider from "$lib/components/ui/slider/slider.svelte";
+	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
 	import { Menu } from "@lucide/svelte";
+
+	let wpm = $state(300);
 </script>
 
 <div class="fixed inset-0 flex flex-col">
 	<!-- Main Content -->
 	<div class="flex-grow flex justify-center items-center">
 		<div
-			class="w-full max-w-3xl flex flex-col gap-2 bg-card border-border rounded-xl border p-6"
+			class="w-full max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
 		>
 			<div class="flex items-center justify-between">
 				<h1 class="text-2xl font-bold">ReadMeFast</h1>
 				<Button variant="outline" class="size-10">
 					<Menu />
 				</Button>
+			</div>
+			<Textarea placeholder="Enter text here" class="min-h-60" />
+			<div class="flex gap-2 items-center">
+				<div class="flex-grow flex gap-4 items-center px-4">
+					<Slider
+						type="single"
+						bind:value={wpm}
+						min={50}
+						max={1000}
+						step={50}
+					/>
+					<span class="whitespace-nowrap">{wpm} wpm</span>
+				</div>
+				<Button>Submit</Button>
 			</div>
 		</div>
 	</div>
