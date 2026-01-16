@@ -1,5 +1,7 @@
 <script>
-	import InputPage from "$lib/pages/inputPage.svelte";
+	import InputPage from "$lib/pages/InputPage.svelte";
+
+	let text = $state("");
 </script>
 
-<InputPage />
+<InputPage bind:text />

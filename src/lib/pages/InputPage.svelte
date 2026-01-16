@@ -5,6 +5,7 @@
 	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
 	import { Menu } from "@lucide/svelte";
 
+	let { text = $bindable() } = $props()
 	let wpm = $state(300);
 </script>
 
@@ -20,7 +21,11 @@
 					<Menu />
 				</Button>
 			</div>
-			<Textarea placeholder="Enter text here" class="min-h-60" />
+			<Textarea
+				bind:value={text}
+				placeholder="Enter text here"
+				class="min-h-60"
+			/>
 			<div class="flex gap-2 items-center">
 				<div class="flex-grow flex gap-4 items-center px-4">
 					<Slider
