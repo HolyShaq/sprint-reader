@@ -5,7 +5,7 @@
 	import Textarea from "$lib/components/ui/textarea/textarea.svelte";
 	import { Menu } from "@lucide/svelte";
 
-	let { text = $bindable() } = $props()
+	let { text = $bindable() } = $props();
 	let wpm = $state(300);
 </script>
 
@@ -17,7 +17,7 @@
 		>
 			<div class="flex items-center justify-between">
 				<h1 class="text-2xl font-bold">ReadMeFast</h1>
-				<Button variant="outline" class="size-10">
+				<Button variant="outline" size="icon">
 					<Menu />
 				</Button>
 			</div>
