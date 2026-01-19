@@ -19,7 +19,7 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
-  const offset = 0; // Use this to adjust x position of the word
+  const offset = -300; // Use this to adjust x position of the word
 
   $effect(() => {
     currentWord;
@@ -33,7 +33,7 @@
       const orpLetterRect = orpLetterElement.getBoundingClientRect();
       const orpLetterWidth = orpLetterRect.width;
       const xOffset =
-        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 - offset;
+        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 + offset;
 
       firstHalfElement.style.transform = `translateX(${xOffset}px)`;
       orpLetterElement.style.transform = `translateX(${xOffset}px)`;
@@ -50,7 +50,11 @@
   });
 </script>
 
-<div transition:fade={{ duration: 100 }} class="relative w-screen h-screen">
+<div
+  transition:fade={{ duration: 100 }}
+  class="relative w-screen h-screen overflow-hidden"
+>
+  <!-- Close button -->
   <Button
     onclick={onBack}
     size="icon"
@@ -59,11 +63,34 @@
     <X class="size-12" />
   </Button>
 
+  <!-- Word -->
   <h1
-    class="flex gap-0 text-9xl font-bold absolute top-1/2 left-1/2 -translate-y-1/2"
+    class="flex gap-0 font-bold absolute top-1/2 left-1/2 -translate-y-1/2"
+    style:font-size={`${120}px`}
   >
     <span id="firstHalf">{firstHalf}</span>
     <span id="orpLetter" class="text-red-500">{orpLetter}</span>
     <span id="secondHalf">{secondHalf}</span>
   </h1>
+
+  <!-- Guideline Markers -->
+  <div
+    class="absolute top-1/2 w-full h-2 bg-border"
+    style:transform={`translateY(-${300}px)`}
+  ></div>
+  <div
+    class="absolute top-1/2 w-full h-2 bg-border"
+    style:transform={`translateY(${300}px)`}
+  ></div>
+  <div
+    class="absolute top-1/2 left-1/2 w-2 bg-border"
+    style:transform={`translate(${offset}px, -${300 - 8}px)`}
+    style:height={`${100}px`}
+  ></div>
+
+  <div
+    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-y-full"
+    style:transform={`translate(${offset}px, ${300}px)`}
+    style:height={`${100}px`}
+  ></div>
 </div>
