@@ -2,13 +2,15 @@
   import { Button } from "$lib/components/ui/button";
   import { getORPIndexFromLength } from "$lib/utils";
   import { X } from "@lucide/svelte";
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
   interface Props {
     text: string;
+    wpm: number;
     onBack: () => void;
   }
-  let { text, onBack }: Props = $props();
+  let { text, wpm, onBack }: Props = $props();
 
   let textIndex = $state(0);
   const textArray = $derived(text.trim().split(/\s+/));
@@ -41,11 +43,32 @@
     }
   });
 
+  let isPlaying = $state(false);
+  let nextWordTimeout: number | null = null;
+  const nextWord = () => {
+    if (!isPlaying) return;
+    if (textIndex >= textArray.length - 1) {
+      isPlaying = false;
+      return;
+    }
+
+    textIndex++;
+
+    nextWordTimeout = setTimeout(nextWord, 60000 / wpm);
+  };
+
   document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
+    if (e.code === "ArrowLeft") {
       textIndex = Math.max(0, textIndex - 1);
-    } else if (e.key === "ArrowRight") {
+    } else if (e.code === "ArrowRight") {
       textIndex = Math.min(textArray.length - 1, textIndex + 1);
+    } else if (e.code === "Space") {
+      isPlaying = !isPlaying;
+      if (isPlaying) nextWord();
+      else if (nextWordTimeout) {
+        clearTimeout(nextWordTimeout);
+        nextWordTimeout = null;
+      }
     }
   });
 </script>

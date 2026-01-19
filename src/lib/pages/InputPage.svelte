@@ -9,11 +9,10 @@
 
   interface Props {
     text: string;
+    wpm: number;
     onSubmit: () => void;
   }
-  let { text = $bindable(), onSubmit }: Props = $props();
-
-  let wpm = $state(300);
+  let { text = $bindable(), wpm = $bindable(300), onSubmit }: Props = $props();
 </script>
 
 <div class="fixed inset-0 flex flex-col">
