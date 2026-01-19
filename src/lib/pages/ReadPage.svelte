@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
+  import Progress from "$lib/components/ui/progress/progress.svelte";
   import { getORPIndexFromLength } from "$lib/utils";
   import { X } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
@@ -14,6 +15,7 @@
 
   let textIndex = $state(0);
   const textArray = $derived(text.trim().split(/\s+/));
+  let progress = $derived(textIndex / textArray.length);
   const currentWord = $derived(textArray[textIndex] ?? "");
 
   const orpIndex = $derived(getORPIndexFromLength(currentWord.length));
@@ -107,21 +109,30 @@
 
   <!-- Guideline Markers -->
   <div
-    class="absolute top-1/2 w-full h-2 bg-border"
+    class="absolute top-1/2 w-full h-2 bg-border/50"
     style:transform={`translateY(-${300}px)`}
   ></div>
   <div
-    class="absolute top-1/2 w-full h-2 bg-border"
+    class="absolute top-1/2 w-full h-2 bg-border/50"
     style:transform={`translateY(${300}px)`}
   ></div>
   <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-x-1/2"
+    class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
     style:transform={`translate(${offset}px, -${300 - 8}px)`}
     style:height={`${100}px`}
   ></div>
   <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-x-1/2 -translate-y-full"
+    class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
     style:transform={`translate(${offset}px, ${300}px)`}
     style:height={`${100}px`}
   ></div>
+
+  <!-- Progress Bar -->
+  <div
+    class="absolute w-full px-12 gap-4 flex top-1/2 items-center"
+    style:transform={`translateY(${320}px)`}
+  >
+    <Progress value={progress} min={0} max={1} class="flex-grow" />
+    <span class="whitespace-nowrap">{textIndex + 1} / {textArray.length}</span>
+  </div>
 </div>
