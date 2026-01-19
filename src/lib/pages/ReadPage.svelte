@@ -19,6 +19,8 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
+  const offset = 0; // Use this to adjust x position of the word
+
   $effect(() => {
     currentWord;
     const firstHalfElement = document.getElementById("firstHalf");
@@ -31,7 +33,7 @@
       const orpLetterRect = orpLetterElement.getBoundingClientRect();
       const orpLetterWidth = orpLetterRect.width;
       const xOffset =
-        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2;
+        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 - offset;
 
       firstHalfElement.style.transform = `translateX(${xOffset}px)`;
       orpLetterElement.style.transform = `translateX(${xOffset}px)`;
