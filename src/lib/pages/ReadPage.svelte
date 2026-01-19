@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import Progress from "$lib/components/ui/progress/progress.svelte";
-  import { getORPIndexFromLength } from "$lib/utils";
+  import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { X } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -55,8 +55,8 @@
     }
 
     textIndex++;
-
-    nextWordTimeout = setTimeout(nextWord, 60000 / wpm);
+    const delayMultiplier = getDelayMultiplier(currentWord);
+    nextWordTimeout = setTimeout(nextWord, (60000 / wpm) * delayMultiplier);
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {

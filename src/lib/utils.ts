@@ -15,12 +15,3 @@ export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & {
   ref?: U | null;
 };
-
-// Custom
-export const getORPIndexFromLength = (wordLength: number) => {
-  if (wordLength <= 1) return 0;
-  if (wordLength <= 5) return 1;
-  if (wordLength <= 9) return 2;
-  if (wordLength <= 13) return 3;
-  return 4;
-};
