@@ -18,11 +18,9 @@ export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & {
 
 // Custom
 export const getORPIndexFromLength = (wordLength: number) => {
-  if (wordLength <= 0) return 0;
-
-  // ORP ≈ round(length * 0.4), capped at 8 (1-based)
-  const orp1Based = Math.min(8, Math.round(wordLength * 0.4));
-
-  // Convert to 0-based index
-  return Math.max(0, orp1Based - 1);
+  if (wordLength <= 1) return 0;
+  if (wordLength <= 5) return 1;
+  if (wordLength <= 9) return 2;
+  if (wordLength <= 13) return 3;
+  return 4;
 };

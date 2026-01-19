@@ -18,6 +18,14 @@
   const firstHalf = $derived(currentWord.slice(0, orpIndex));
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      textIndex = Math.max(0, textIndex - 1);
+    } else if (e.key === "ArrowRight") {
+      textIndex = Math.min(textArray.length - 1, textIndex + 1);
+    }
+  });
 </script>
 
 <div transition:fade={{ duration: 100 }} class="relative w-screen h-screen">
@@ -30,8 +38,10 @@
   </Button>
 
   <h1
-    class="text-9xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    class="flex gap-0 text-9xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
   >
-    {currentWord}
+    <span>{firstHalf}</span>
+    <span class="text-red-500">{orpLetter}</span>
+    <span>{secondHalf}</span>
   </h1>
 </div>
