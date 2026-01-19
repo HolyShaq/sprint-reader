@@ -19,6 +19,26 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
+  $effect(() => {
+    currentWord;
+    const firstHalfElement = document.getElementById("firstHalf");
+    const orpLetterElement = document.getElementById("orpLetter");
+    const secondHalfElement = document.getElementById("secondHalf");
+
+    if (firstHalfElement && orpLetterElement && secondHalfElement) {
+      // Offset the word such that the ORP letter is centered
+      const firstHalfRect = firstHalfElement.getBoundingClientRect();
+      const orpLetterRect = orpLetterElement.getBoundingClientRect();
+      const orpLetterWidth = orpLetterRect.width;
+      const xOffset =
+        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2;
+
+      firstHalfElement.style.transform = `translateX(${xOffset}px)`;
+      orpLetterElement.style.transform = `translateX(${xOffset}px)`;
+      secondHalfElement.style.transform = `translateX(${xOffset}px)`;
+    }
+  });
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") {
       textIndex = Math.max(0, textIndex - 1);
@@ -38,10 +58,10 @@
   </Button>
 
   <h1
-    class="flex gap-0 text-9xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    class="flex gap-0 text-9xl font-bold absolute top-1/2 left-1/2 -translate-y-1/2"
   >
-    <span>{firstHalf}</span>
-    <span class="text-red-500">{orpLetter}</span>
-    <span>{secondHalf}</span>
+    <span id="firstHalf">{firstHalf}</span>
+    <span id="orpLetter" class="text-red-500">{orpLetter}</span>
+    <span id="secondHalf">{secondHalf}</span>
   </h1>
 </div>
