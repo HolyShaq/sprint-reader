@@ -2,7 +2,7 @@
   import { Button } from "$lib/components/ui/button";
   import { getORPIndexFromLength } from "$lib/utils";
   import { X } from "@lucide/svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
 
   interface Props {
@@ -57,12 +57,12 @@
     nextWordTimeout = setTimeout(nextWord, 60000 / wpm);
   };
 
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "ArrowLeft") {
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.code === "ArrowLeft") {
       textIndex = Math.max(0, textIndex - 1);
-    } else if (e.code === "ArrowRight") {
+    } else if (event.code === "ArrowRight") {
       textIndex = Math.min(textArray.length - 1, textIndex + 1);
-    } else if (e.code === "Space") {
+    } else if (event.code === "Space") {
       isPlaying = !isPlaying;
       if (isPlaying) nextWord();
       else if (nextWordTimeout) {
@@ -70,6 +70,15 @@
         nextWordTimeout = null;
       }
     }
+  };
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyDown);
+  });
+
+  onDestroy(() => {
+    document.removeEventListener("keydown", handleKeyDown);
+    if (nextWordTimeout) clearTimeout(nextWordTimeout);
   });
 </script>
 
