@@ -15,7 +15,7 @@
 
   let textIndex = $state(0);
   const textArray = $derived(text.trim().split(/\s+/));
-  let progress = $derived(textIndex / textArray.length);
+  let progress = $derived((textIndex + 1) / textArray.length);
   const currentWord = $derived(textArray[textIndex] ?? "");
 
   const orpIndex = $derived(getORPIndexFromLength(currentWord.length));
