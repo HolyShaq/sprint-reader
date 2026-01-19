@@ -83,13 +83,12 @@
     style:transform={`translateY(${300}px)`}
   ></div>
   <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border"
+    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-x-1/2"
     style:transform={`translate(${offset}px, -${300 - 8}px)`}
     style:height={`${100}px`}
   ></div>
-
   <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-y-full"
+    class="absolute top-1/2 left-1/2 w-2 bg-border -translate-x-1/2 -translate-y-full"
     style:transform={`translate(${offset}px, ${300}px)`}
     style:height={`${100}px`}
   ></div>
