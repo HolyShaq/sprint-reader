@@ -132,7 +132,13 @@
     class="absolute w-full px-12 gap-4 flex top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
-    <Progress value={progress} min={0} max={1} class="flex-grow" />
+    <Progress
+      value={progress}
+      min={0}
+      max={1}
+      dull={isPlaying}
+      class="flex-grow"
+    />
     <span class="whitespace-nowrap">{textIndex + 1} / {textArray.length}</span>
   </div>
 </div>
