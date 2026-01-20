@@ -3,6 +3,7 @@
   import Progress from "$lib/components/ui/progress/progress.svelte";
   import { Slider } from "$lib/components/ui/slider";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
+  import { settings } from "$lib/stores/settings";
   import { X } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -56,7 +57,7 @@
     }
 
     textIndex++;
-    const delayMultiplier = getDelayMultiplier(currentWord);
+    const delayMultiplier = getDelayMultiplier(currentWord, $settings);
     nextWordTimeout = setTimeout(nextWord, (60000 / wpm) * delayMultiplier);
   };
 

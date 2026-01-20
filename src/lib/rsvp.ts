@@ -1,3 +1,4 @@
+import type { Settings } from "./stores/settings";
 import { stripTrailing } from "./utils";
 
 export const getORPIndexFromLength = (wordLength: number) => {
@@ -22,15 +23,13 @@ const ABBREVIATIONS = new Set([
   "i.e.",
 ]);
 
-export const getDelayMultiplier = (word: string) => {
+export const getDelayMultiplier = (word: string, settings: Settings) => {
   if (ABBREVIATIONS.has(word.toLowerCase())) return 1;
 
-  const softStopMultiplier = 1.5;
   const softStops = [",", ";"];
-
-  const hardStopMultiplier = 2.5;
   const hardStops = [".", "!", "?"];
 
+  const { softStopMultiplier, hardStopMultiplier } = settings;
   const strippedWord = stripTrailing(word);
   const lastChar = strippedWord[strippedWord.length - 1];
   if (softStops.includes(lastChar)) return softStopMultiplier;
