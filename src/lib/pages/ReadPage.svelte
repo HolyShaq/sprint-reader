@@ -4,7 +4,7 @@
   import { Slider } from "$lib/components/ui/slider";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
-  import { X } from "@lucide/svelte";
+  import { Menu, X } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
 
@@ -101,6 +101,15 @@
     <X class="size-12" />
   </Button>
 
+  <Button
+    class="absolute top-8 right-8 {isPlaying
+      ? 'text-accent-foreground/20'
+      : 'text-accent-foreground'} hover:text-accent-foreground/80 hover:scale-110 transition-all duration-100 bg-background border-background hover:bg-background hover:border-background"
+    size="icon"
+  >
+    <Menu class="size-12" />
+  </Button>
+
   <!-- Word -->
   <h1
     class="flex gap-0 font-bold absolute top-1/2 left-1/2 -translate-y-1/2"
@@ -145,6 +154,8 @@
       dull={isPlaying}
       class="flex-grow"
     />
-    <span class="whitespace-nowrap">{textIndex + 1} / {textArray.length}</span>
+    <span class="whitespace-nowrap {isPlaying ? 'text-muted' : ''} transition-colors duration-100"
+      >{textIndex + 1} / {textArray.length}</span
+    >
   </div>
 </div>
