@@ -7,11 +7,8 @@
     class: className,
     max = 100,
     value,
-    dull = false,
     ...restProps
-  }: WithoutChildrenOrChild<ProgressPrimitive.RootProps> & {
-    dull?: boolean;
-  } = $props();
+  }: WithoutChildrenOrChild<ProgressPrimitive.RootProps> = $props();
 </script>
 
 <ProgressPrimitive.Root
@@ -27,7 +24,7 @@
 >
   <div
     data-slot="progress-indicator"
-    class={`${dull ? "bg-primary/10" : "bg-primary"} h-full w-full flex-1 transition-colors duration-300`}
+    class="bg-primary h-full w-full flex-1 transition-colors duration-300"
     style="transform: translateX(-{100 - (100 * (value ?? 0)) / (max ?? 1)}%)"
   ></div>
 </ProgressPrimitive.Root>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import Progress from "$lib/components/ui/progress/progress.svelte";
+  import { Slider } from "$lib/components/ui/slider";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { X } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
@@ -92,7 +93,9 @@
   <Button
     onclick={onBack}
     size="icon"
-    class="absolute top-8 left-8 text-accent-foreground hover:text-accent-foreground/80 hover:scale-110 transition-all duration-100 bg-background border-background hover:bg-background hover:border-background"
+    class="absolute top-8 left-8 {isPlaying
+      ? 'text-accent-foreground/20'
+      : 'text-accent-foreground'} hover:text-accent-foreground/80 hover:scale-110 transition-all duration-100 bg-background border-background hover:bg-background hover:border-background"
   >
     <X class="size-12" />
   </Button>
@@ -132,10 +135,12 @@
     class="absolute w-full px-12 gap-4 flex top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
-    <Progress
-      value={progress}
+    <Slider
+      type="single"
+      bind:value={textIndex}
       min={0}
-      max={1}
+      max={textArray.length - 1}
+      step={1}
       dull={isPlaying}
       class="flex-grow"
     />
