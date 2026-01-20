@@ -1,6 +1,10 @@
 <script lang="ts">
   import ModeToggle from "$lib/components/ModeToggle.svelte";
-  import Button from "$lib/components/ui/button/button.svelte";
+  import SettingsModal from "$lib/components/SettingsModal.svelte";
+  import Button, {
+    buttonVariants,
+  } from "$lib/components/ui/button/button.svelte";
+  import { Trigger } from "$lib/components/ui/dialog";
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
   import { Menu } from "@lucide/svelte";
@@ -24,9 +28,11 @@
     >
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold">ReadMeFast</h1>
-        <Button variant="outline" size="icon">
-          <Menu />
-        </Button>
+        <SettingsModal>
+          <Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
+            <Menu />
+          </Trigger>
+        </SettingsModal>
       </div>
       <Textarea
         bind:value={text}

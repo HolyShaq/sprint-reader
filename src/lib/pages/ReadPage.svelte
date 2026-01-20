@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import SettingsModal from "$lib/components/SettingsModal.svelte";
+  import { Button, buttonVariants } from "$lib/components/ui/button";
+  import { Trigger } from "$lib/components/ui/dialog";
   import Progress from "$lib/components/ui/progress/progress.svelte";
   import { Slider } from "$lib/components/ui/slider";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
   import { Menu, X } from "@lucide/svelte";
+  import clsx from "clsx";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
 
@@ -101,14 +104,17 @@
     <X class="size-12" />
   </Button>
 
-  <Button
-    class="absolute top-8 right-8 {isPlaying
-      ? 'text-accent-foreground/20'
-      : 'text-accent-foreground'} hover:text-accent-foreground/80 hover:scale-110 transition-all duration-100 bg-background border-background hover:bg-background hover:border-background"
-    size="icon"
-  >
-    <Menu class="size-12" />
-  </Button>
+  <SettingsModal>
+    <Trigger
+      class={clsx(
+        buttonVariants({ variant: "outline", size: "icon" }),
+        isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
+        "absolute top-8 right-8 hover:text-accent-foreground/80 hover:scale-110 transition-all duration-100 bg-background border-0 hover:bg-background",
+      )}
+    >
+      <Menu class="size-12" />
+    </Trigger>
+  </SettingsModal>
 
   <!-- Word -->
   <h1
@@ -154,7 +160,10 @@
       dull={isPlaying}
       class="flex-grow"
     />
-    <span class="whitespace-nowrap {isPlaying ? 'text-muted' : ''} transition-colors duration-100"
+    <span
+      class="whitespace-nowrap {isPlaying
+        ? 'text-muted'
+        : ''} transition-colors duration-100"
       >{textIndex + 1} / {textArray.length}</span
     >
   </div>
