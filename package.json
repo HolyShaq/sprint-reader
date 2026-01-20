@@ -31,6 +31,7 @@
 	},
 	"dependencies": {
 		"bits-ui": "^2.15.4",
-		"mode-watcher": "^1.1.0"
+		"mode-watcher": "^1.1.0",
+		"svelte-persisted-store": "^0.12.0"
 	}
 }
