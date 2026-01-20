@@ -20,13 +20,16 @@
 
   let textIndex = $state(0);
   const textArray = $derived(text.trim().split(/\s+/));
-  let progress = $derived((textIndex + 1) / textArray.length);
   const currentWord = $derived(textArray[textIndex] ?? "");
 
   const orpIndex = $derived(getORPIndexFromLength(currentWord.length));
   const firstHalf = $derived(currentWord.slice(0, orpIndex));
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
+  const wordsBefore = $derived(textArray.slice(textIndex - 3, textIndex) ?? []);
+  const wordsAfter = $derived(
+    textArray.slice(textIndex + 1, textIndex + 4) ?? [],
+  );
 
   const offset = -300; // Use this to adjust x position of the word
 
@@ -35,10 +38,18 @@
     const firstHalfElement = document.getElementById("firstHalf");
     const orpLetterElement = document.getElementById("orpLetter");
     const secondHalfElement = document.getElementById("secondHalf");
+    const wordBeforeElement = document.getElementById("wordBefore");
+    const wordAfterElement = document.getElementById("wordAfter");
 
-    if (firstHalfElement && orpLetterElement && secondHalfElement) {
+    if (
+      firstHalfElement &&
+      orpLetterElement &&
+      secondHalfElement &&
+      wordBeforeElement &&
+      wordAfterElement
+    ) {
       // Offset the word such that the ORP letter is centered
-      const firstHalfRect = firstHalfElement.getBoundingClientRect();
+      const firstHalfRect = wordBeforeElement.getBoundingClientRect();
       const orpLetterRect = orpLetterElement.getBoundingClientRect();
       const orpLetterWidth = orpLetterRect.width;
       const xOffset =
@@ -47,6 +58,9 @@
       firstHalfElement.style.transform = `translateX(${xOffset}px)`;
       orpLetterElement.style.transform = `translateX(${xOffset}px)`;
       secondHalfElement.style.transform = `translateX(${xOffset}px)`;
+
+      wordBeforeElement.style.transform = `translateX(${xOffset}px)`;
+      wordAfterElement.style.transform = `translateX(${xOffset}px)`;
     }
   });
 
@@ -117,14 +131,26 @@
   </SettingsModal>
 
   <!-- Word -->
-  <h1
-    class="flex gap-0 font-bold absolute top-1/2 left-1/2 -translate-y-1/2"
+  <div
     style:font-size={`${120}px`}
+    class="flex items-end gap-8 absolute top-1/2 left-1/2 -translate-y-1/2 whitespace-nowrap"
   >
-    <span id="firstHalf">{firstHalf}</span>
-    <span id="orpLetter" class="text-red-500">{orpLetter}</span>
-    <span id="secondHalf">{secondHalf}</span>
-  </h1>
+    <div id="wordBefore" class="flex space-x-8">
+      {#each wordsBefore as word}
+        <h1 class="text-muted-foreground/50">{word}</h1>
+      {/each}
+    </div>
+    <h1 class="flex gap-0 font-bold">
+      <span id="firstHalf">{firstHalf}</span>
+      <span id="orpLetter" class="text-red-500">{orpLetter}</span>
+      <span id="secondHalf">{secondHalf}</span>
+    </h1>
+    <div id="wordAfter" class="flex space-x-8">
+      {#each wordsAfter as word}
+        <h1 class="text-muted-foreground/50">{word}</h1>
+      {/each}
+    </div>
+  </div>
 
   <!-- Guideline Markers -->
   <div
