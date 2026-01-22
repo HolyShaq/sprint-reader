@@ -1,27 +1,35 @@
 import { persisted } from "svelte-persisted-store";
 
 export type Settings = {
-  wordCenterOffset: number;
+  fontStyle: string;
   fontSize: number;
-  guidelineVisible: boolean;
-  verticalTicksVisible: boolean;
+  wordCenterOffset: number;
   progressBarVisible: boolean;
   progressTextVisible: boolean;
-  uniformWordTiming: boolean;
+  guidelineVisible: boolean;
+  verticalTicksVisible: boolean;
+  centerOnOrp: boolean;
+  orpHighlight: boolean;
+  dynamicWordTiming: boolean;
   softStopMultiplier: number;
   hardStopMultiplier: number;
+  wpm: number;
 };
 
 const defaultSettings = {
-  wordCenterOffset: -300,
+  fontStyle: "sans-serif",
   fontSize: 120,
-  guidelineVisible: true,
-  verticalTicksVisible: true,
+  wordCenterOffset: -300,
   progressBarVisible: true,
   progressTextVisible: true,
-  uniformWordTiming: true,
+  guidelineVisible: true,
+  verticalTicksVisible: true,
+  centerOnOrp: true,
+  orpHighlight: true,
+  dynamicWordTiming: true,
   softStopMultiplier: 1.5,
   hardStopMultiplier: 2.5,
+  wpm: 300,
 };
 
 export const settings = persisted<Settings>("user-settings", defaultSettings);
