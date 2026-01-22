@@ -7,7 +7,7 @@
   import Slider from "./ui/slider/slider.svelte";
 
   // Ideally, this should come from a store or props
-  let { children } = $props();
+  let { children, dimOnDrag = false } = $props();
 
   const fonts = [
     { value: "sans-serif", label: "Sans Serif" },
@@ -33,8 +33,8 @@
 
 <Dialog.Root open={true}>
   {@render children()}
-  <Dialog.Overlay class={isDragging ? "bg-transparent" : "bg-black/50"} />
-  <Dialog.Content class="sm:max-w-[480px] {isDragging ? 'opacity-50' : ''}">
+  <Dialog.Overlay class={dimOnDrag && isDragging ? "bg-transparent" : "bg-black/50"} />
+  <Dialog.Content class="sm:max-w-[480px] {dimOnDrag && isDragging ? 'opacity-50' : ''}">
     <Dialog.Header>
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>

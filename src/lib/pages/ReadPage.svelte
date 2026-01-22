@@ -120,7 +120,7 @@
     <X class="size-12" />
   </Button>
 
-  <SettingsModal>
+  <SettingsModal dimOnDrag>
     <Trigger
       class={clsx(
         buttonVariants({ variant: "outline", size: "icon" }),
