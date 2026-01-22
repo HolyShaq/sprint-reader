@@ -29,20 +29,12 @@
   );
 
   let isDragging = $state(false);
-  function startDrag() {
-    isDragging = true;
-    console.log("[isDragging);]", isDragging);
-  }
-
-  function endDrag() {
-    isDragging = false;
-    console.log("[isDragging);]", isDragging);
-  }
 </script>
 
 <Dialog.Root open={true}>
   {@render children()}
-  <Dialog.Content class="sm:max-w-[480px] {isDragging ? 'opacity-10' : ''}">
+  <Dialog.Overlay class={isDragging ? "bg-transparent" : "bg-black/50"} />
+  <Dialog.Content class="sm:max-w-[480px] {isDragging ? 'opacity-50' : ''}">
     <Dialog.Header>
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>
@@ -101,6 +93,8 @@
               min={36}
               step={FONT_SIZES}
               max={180}
+              onValueChange={() => (isDragging = true)}
+              onValueCommit={() => (isDragging = false)}
               bind:value={$settings.fontSize}
               class="flex h-2 my-auto w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
             />
@@ -125,8 +119,8 @@
             min={-400}
             max={200}
             step={10}
-            onValueChange={startDrag}
-            onValueCommit={endDrag}
+            onValueChange={() => (isDragging = true)}
+            onValueCommit={() => (isDragging = false)}
             bind:value={$settings.wordCenterOffset}
             class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
           />
