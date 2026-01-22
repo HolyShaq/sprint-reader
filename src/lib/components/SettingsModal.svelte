@@ -1,7 +1,10 @@
 <script lang="ts">
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { settings } from "$lib/stores/settings";
+  import { FONT_SIZES, settings } from "$lib/stores/settings";
+  import { Checkbox } from "./ui/checkbox";
+  import Input from "./ui/input/input.svelte";
+  import Slider from "./ui/slider/slider.svelte";
 
   // Ideally, this should come from a store or props
   let { children } = $props();
@@ -33,7 +36,7 @@
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>
 
-    <div class="grid gap-6 py-4">
+    <div class="grid gap-4 py-4">
       <div class="flex flex-col gap-4">
         <h4
           class="text-sm font-semibold text-muted-foreground uppercase tracking-wider leading-none"
@@ -69,7 +72,7 @@
             </Select.Root>
           </div>
 
-          <div class="grid gap-2 flex-1">
+          <div class="flex flex-col gap-2 flex-1 h-full">
             <div class="flex items-center justify-between">
               <label
                 for="fontSize"
@@ -81,11 +84,12 @@
                 >{$settings.fontSize}px</span
               >
             </div>
-            <input
+            <Slider
               id="fontSize"
-              type="range"
-              min="36"
-              max="180"
+              type="single"
+              min={36}
+              step={FONT_SIZES}
+              max={180}
               bind:value={$settings.fontSize}
               class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
             />
@@ -104,11 +108,12 @@
               >{$settings.wordCenterOffset}px</span
             >
           </div>
-          <input
+          <Slider
             id="offset"
-            type="range"
-            min="-400"
-            max="200"
+            type="single"
+            min={-400}
+            max={200}
+            step={10}
             bind:value={$settings.wordCenterOffset}
             class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
           />
@@ -126,9 +131,8 @@
         <div class="grid gap-3">
           <div class="flex">
             <div class="flex flex-1 items-center space-x-2">
-              <input
+              <Checkbox
                 id="progressBar"
-                type="checkbox"
                 bind:checked={$settings.progressBarVisible}
                 class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
               />
@@ -138,9 +142,8 @@
             </div>
 
             <div class="flex flex-1 items-center space-x-2">
-              <input
+              <Checkbox
                 id="progressText"
-                type="checkbox"
                 bind:checked={$settings.progressTextVisible}
                 class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
               />
@@ -153,9 +156,8 @@
           <div class="flex items-start">
             <div class="grid flex-1 gap-3">
               <div class="flex items-center space-x-2">
-                <input
+                <Checkbox
                   id="guidelines"
-                  type="checkbox"
                   bind:checked={$settings.guidelineVisible}
                   class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                 />
@@ -170,7 +172,7 @@
                 <div
                   class="ml-6 flex items-center space-x-2 animate-in slide-in-from-top-1 fade-in duration-200"
                 >
-                  <input
+                  <Checkbox
                     id="verticalTicks"
                     type="checkbox"
                     bind:checked={$settings.verticalTicksVisible}
@@ -188,14 +190,13 @@
 
             <div class="grid flex-1 gap-3">
               <div class="flex items-center space-x-2">
-                <input
-                  id="guidelines"
-                  type="checkbox"
+                <Checkbox
+                  id="centerOnOrp"
                   bind:checked={$settings.centerOnOrp}
                   class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                 />
                 <label
-                  for="guidelines"
+                  for="centerOnOrp"
                   class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Center on ORP
@@ -205,14 +206,13 @@
                 <div
                   class="ml-6 flex items-center space-x-2 animate-in slide-in-from-top-1 fade-in duration-200"
                 >
-                  <input
-                    id="verticalTicks"
-                    type="checkbox"
+                  <Checkbox
+                    id="orpHighlight"
                     bind:checked={$settings.orpHighlight}
                     class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                   />
                   <label
-                    for="verticalTicks"
+                    for="orpHighlight"
                     class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     ORP Highlight
@@ -234,9 +234,8 @@
         </h4>
         <div class="grid gap-3">
           <div class="flex items-center space-x-2">
-            <input
+            <Checkbox
               id="uniformWordTiming"
-              type="checkbox"
               bind:checked={$settings.dynamicWordTiming}
               class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
             />
@@ -259,7 +258,7 @@
                 >
                   Soft Stop Mult.
                 </label>
-                <input
+                <Input
                   id="softStop"
                   type="number"
                   step="0.1"
@@ -274,7 +273,7 @@
                 >
                   Hard Stop Mult.
                 </label>
-                <input
+                <Input
                   id="hardStop"
                   type="number"
                   step="0.1"
@@ -288,7 +287,7 @@
           <div class="grid gap-2">
             <div class="flex items-center justify-between">
               <label
-                for="offset"
+                for="wpm"
                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Words Per Minute
@@ -297,11 +296,12 @@
                 >{$settings.wpm} wpm</span
               >
             </div>
-            <input
-              id="offset"
-              type="range"
-              min="-400"
-              max="200"
+            <Slider
+              id="wpm"
+              type="single"
+              min={50}
+              max={1000}
+              step={50}
               bind:value={$settings.wpm}
               class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
             />
@@ -310,7 +310,7 @@
       </div>
     </div>
 
-    <Dialog.Footer>
+    <Dialog.Footer class="-mt-4">
       <Dialog.Close
         class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90"
       >

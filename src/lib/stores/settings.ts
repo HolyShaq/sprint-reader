@@ -1,8 +1,13 @@
 import { persisted } from "svelte-persisted-store";
 
+export const FONT_SIZES = [
+  36, 42, 48, 56, 64, 72, 84, 96, 112, 128, 144, 160, 180,
+];
+export type FontSizes = (typeof FONT_SIZES)[number];
+
 export type Settings = {
   fontStyle: string;
-  fontSize: number;
+  fontSize: FontSizes;
   wordCenterOffset: number;
   progressBarVisible: boolean;
   progressTextVisible: boolean;
