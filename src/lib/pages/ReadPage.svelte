@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import SettingsModal from "$lib/components/SettingsModal.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Trigger } from "$lib/components/ui/dialog";
@@ -34,6 +35,8 @@
   );
 
   $effect(() => {
+    if (!browser) return;
+
     currentWord;
     $settings.fontSize;
 
@@ -96,10 +99,12 @@
   };
 
   onMount(() => {
+    if (!browser) return;
     document.addEventListener("keydown", handleKeyDown);
   });
 
   onDestroy(() => {
+    if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
     if (nextWordTimeout) clearTimeout(nextWordTimeout);
   });

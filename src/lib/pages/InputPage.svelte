@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import ModeToggle from "$lib/components/ModeToggle.svelte";
   import SettingsModal from "$lib/components/SettingsModal.svelte";
   import Button, {
@@ -26,10 +27,12 @@
   };
 
   onMount(() => {
+    if (!browser) return;
     document.addEventListener("keydown", handleKeyDown);
   });
 
   onDestroy(() => {
+    if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
   });
 </script>
