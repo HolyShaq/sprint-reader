@@ -2,7 +2,6 @@
   import SettingsModal from "$lib/components/SettingsModal.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Trigger } from "$lib/components/ui/dialog";
-  import Progress from "$lib/components/ui/progress/progress.svelte";
   import { Slider } from "$lib/components/ui/slider";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
@@ -13,10 +12,9 @@
 
   interface Props {
     text: string;
-    wpm: number;
     onBack: () => void;
   }
-  let { text, wpm, onBack }: Props = $props();
+  let { text, onBack }: Props = $props();
 
   let textIndex = $state(0);
   const textArray = $derived(text.trim().split(/\s+/));
@@ -37,33 +35,30 @@
 
   $effect(() => {
     currentWord;
-    const firstHalfElement = document.getElementById("firstHalf");
-    const orpLetterElement = document.getElementById("orpLetter");
-    const secondHalfElement = document.getElementById("secondHalf");
-    const wordBeforeElement = document.getElementById("wordBefore");
-    const wordAfterElement = document.getElementById("wordAfter");
+    $settings.fontSize;
 
-    if (
-      firstHalfElement &&
-      orpLetterElement &&
-      secondHalfElement &&
-      wordBeforeElement &&
-      wordAfterElement
-    ) {
+    const wordElement = document.getElementById("word");
+    const orpLetterElement = document.getElementById("orpLetter");
+    const wordBeforeElement = document.getElementById("wordBefore");
+
+    if (!wordElement || !orpLetterElement || !wordBeforeElement) return;
+
+    let xOffset;
+    if ($settings.centerOnOrp) {
       // Offset the word such that the ORP letter is centered
       const firstHalfRect = wordBeforeElement.getBoundingClientRect();
       const orpLetterRect = orpLetterElement.getBoundingClientRect();
       const orpLetterWidth = orpLetterRect.width;
-      const xOffset =
-        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 + $settings.wordCenterOffset;
-
-      firstHalfElement.style.transform = `translateX(${xOffset}px)`;
-      orpLetterElement.style.transform = `translateX(${xOffset}px)`;
-      secondHalfElement.style.transform = `translateX(${xOffset}px)`;
-
-      wordBeforeElement.style.transform = `translateX(${xOffset}px)`;
-      wordAfterElement.style.transform = `translateX(${xOffset}px)`;
+      xOffset =
+        firstHalfRect.left -
+        orpLetterRect.left -
+        orpLetterWidth / 2 +
+        $settings.wordCenterOffset;
+    } else {
+      const wordRect = wordElement!.getBoundingClientRect();
+      xOffset = -wordRect.width / 2 + $settings.wordCenterOffset;
     }
+    wordElement.style.transform = `translateX(${xOffset}px)`;
   });
 
   let isPlaying = $state(false);
@@ -77,7 +72,11 @@
 
     textIndex++;
     const delayMultiplier = getDelayMultiplier(currentWord, $settings);
-    nextWordTimeout = setTimeout(nextWord, (60000 / wpm) * delayMultiplier);
+    console.log("[(60000 / $settings.wpm) * delayMultiplier]", (60000 / $settings.wpm) * delayMultiplier)
+    nextWordTimeout = setTimeout(
+      nextWord,
+      (60000 / $settings.wpm) * delayMultiplier,
+    );
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -134,7 +133,9 @@
 
   <!-- Word -->
   <div
-    style:font-size={`${120}px`}
+    id="word"
+    style:font-size={`${$settings.fontSize}px`}
+    style:font-family={$settings.fontStyle}
     class="flex items-end gap-8 absolute top-1/2 left-1/2 -translate-y-1/2 whitespace-nowrap"
   >
     <div id="wordBefore" class="flex space-x-8">
@@ -144,7 +145,12 @@
     </div>
     <h1 class="flex gap-0 font-bold">
       <span id="firstHalf">{firstHalf}</span>
-      <span id="orpLetter" class="text-red-500">{orpLetter}</span>
+      <span
+        id="orpLetter"
+        class="transition-colors duration-200"
+        class:text-red-500={$settings.centerOnOrp && $settings.orpHighlight}
+        >{orpLetter}</span
+      >
       <span id="secondHalf">{secondHalf}</span>
     </h1>
     <div id="wordAfter" class="flex space-x-8">
@@ -155,44 +161,60 @@
   </div>
 
   <!-- Guideline Markers -->
-  <div
-    class="absolute top-1/2 w-full h-2 bg-border/50"
-    style:transform={`translateY(-${300}px)`}
-  ></div>
-  <div
-    class="absolute top-1/2 w-full h-2 bg-border/50"
-    style:transform={`translateY(${300}px)`}
-  ></div>
-  <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
-    style:transform={`translate(${$settings.wordCenterOffset}px, -${300 - 8}px)`}
-    style:height={`${100}px`}
-  ></div>
-  <div
-    class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
-    style:transform={`translate(${$settings.wordCenterOffset}px, ${300}px)`}
-    style:height={`${100}px`}
-  ></div>
+  {#if $settings.guidelineVisible}
+    <div
+      transition:fade={{ duration: 100 }}
+      class="absolute top-1/2 w-full h-2 bg-border/50"
+      style:transform={`translateY(-${300}px)`}
+    ></div>
+    <div
+      transition:fade={{ duration: 100 }}
+      class="absolute top-1/2 w-full h-2 bg-border/50"
+      style:transform={`translateY(${300}px)`}
+    ></div>
+    {#if $settings.verticalTicksVisible}
+      <div
+        transition:fade={{ duration: 100 }}
+        class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
+        style:transform={`translate(${$settings.wordCenterOffset}px, -${300 - 8}px)`}
+        style:height={`${100}px`}
+      ></div>
+      <div
+        transition:fade={{ duration: 100 }}
+        class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
+        style:transform={`translate(${$settings.wordCenterOffset}px, ${300}px)`}
+        style:height={`${100}px`}
+      ></div>
+    {/if}
+  {/if}
 
   <!-- Progress Bar -->
   <div
-    class="absolute w-full px-12 gap-4 flex top-1/2 items-center"
+    class="absolute w-full h-6 px-12 gap-4 flex justify-end top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
-    <Slider
-      type="single"
-      bind:value={textIndex}
-      min={0}
-      max={textArray.length - 1}
-      step={1}
-      dull={isPlaying}
-      class="flex-grow"
-    />
-    <span
-      class="whitespace-nowrap {isPlaying
-        ? 'text-muted'
-        : ''} transition-colors duration-100"
-      >{textIndex + 1} / {textArray.length}</span
-    >
+    {#if $settings.progressBarVisible}
+      <div class="flex-grow mt-2" transition:fade={{ duration: 100 }}>
+        <Slider
+          type="single"
+          bind:value={textIndex}
+          min={0}
+          max={textArray.length - 1}
+          step={1}
+          dull={isPlaying}
+          class="w-full transition-all duration-200"
+        />
+      </div>
+    {/if}
+
+    {#if $settings.progressTextVisible}
+      <span
+        transition:fade={{ duration: 100 }}
+        class="whitespace-nowrap {isPlaying
+          ? 'text-muted'
+          : ''} transition-colors duration-100"
+        >{textIndex + 1} / {textArray.length}</span
+      >
+    {/if}
   </div>
 </div>

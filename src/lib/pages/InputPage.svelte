@@ -7,16 +7,16 @@
   import { Trigger } from "$lib/components/ui/dialog";
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
+    import { settings } from "$lib/stores/settings";
   import { Menu } from "@lucide/svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
 
   interface Props {
     text: string;
-    wpm: number;
     onSubmit: () => void;
   }
-  let { text = $bindable(), wpm = $bindable(300), onSubmit }: Props = $props();
+  let { text = $bindable(), onSubmit }: Props = $props();
 </script>
 
 <div class="fixed inset-0 flex flex-col">
@@ -43,12 +43,12 @@
         <div class="flex-grow flex gap-4 items-center px-4">
           <Slider
             type="single"
-            bind:value={wpm}
+            bind:value={$settings.wpm}
             min={50}
             max={1000}
             step={50}
           />
-          <span class="whitespace-nowrap">{wpm} wpm</span>
+          <span class="whitespace-nowrap">{$settings.wpm} wpm</span>
         </div>
         <Button onclick={onSubmit}>Submit</Button>
       </div>

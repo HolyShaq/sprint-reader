@@ -23,15 +23,14 @@
     { value: "courier-new", label: "Courier New" },
   ];
 
-  let fontStyle = $state($settings.fontStyle);
   const triggerContent = $derived(
-    fonts.find((f) => f.value === fontStyle)?.label ?? "Select a font",
+    fonts.find((f) => f.value === $settings.fontStyle)?.label ?? "Select a font",
   );
 
   let isDragging = $state(false);
 </script>
 
-<Dialog.Root open={true}>
+<Dialog.Root>
   {@render children()}
   <Dialog.Overlay class={dimOnDrag && isDragging ? "bg-transparent" : "bg-black/50"} />
   <Dialog.Content class="sm:max-w-[480px] {dimOnDrag && isDragging ? 'opacity-50' : ''}">

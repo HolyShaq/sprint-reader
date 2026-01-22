@@ -24,6 +24,7 @@ const ABBREVIATIONS = new Set([
 ]);
 
 export const getDelayMultiplier = (word: string, settings: Settings) => {
+  if (!settings.dynamicWordTiming) return 1
   if (ABBREVIATIONS.has(word.toLowerCase())) return 1;
 
   const softStops = [",", ";"];
