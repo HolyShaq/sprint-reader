@@ -7,8 +7,9 @@
   import { Trigger } from "$lib/components/ui/dialog";
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
-    import { settings } from "$lib/stores/settings";
+  import { settings } from "$lib/stores/settings";
   import { Menu } from "@lucide/svelte";
+  import { onDestroy, onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
 
@@ -17,6 +18,20 @@
     onSubmit: () => void;
   }
   let { text = $bindable(), onSubmit }: Props = $props();
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+      onSubmit();
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyDown);
+  });
+
+  onDestroy(() => {
+    document.removeEventListener("keydown", handleKeyDown);
+  });
 </script>
 
 <div class="fixed inset-0 flex flex-col">

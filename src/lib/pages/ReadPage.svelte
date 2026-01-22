@@ -72,7 +72,6 @@
 
     textIndex++;
     const delayMultiplier = getDelayMultiplier(currentWord, $settings);
-    console.log("[(60000 / $settings.wpm) * delayMultiplier]", (60000 / $settings.wpm) * delayMultiplier)
     nextWordTimeout = setTimeout(
       nextWord,
       (60000 / $settings.wpm) * delayMultiplier,
@@ -91,6 +90,8 @@
         clearTimeout(nextWordTimeout);
         nextWordTimeout = null;
       }
+    } else if (event.code === "Escape") {
+      onBack();
     }
   };
 
@@ -121,6 +122,7 @@
 
   <SettingsModal dimOnDrag>
     <Trigger
+      onkeydown={(e) => e.preventDefault()}
       class={clsx(
         buttonVariants({ variant: "outline", size: "icon" }),
         isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
