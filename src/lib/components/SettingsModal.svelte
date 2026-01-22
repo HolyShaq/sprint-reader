@@ -27,11 +27,22 @@
   const triggerContent = $derived(
     fonts.find((f) => f.value === fontStyle)?.label ?? "Select a font",
   );
+
+  let isDragging = $state(false);
+  function startDrag() {
+    isDragging = true;
+    console.log("[isDragging);]", isDragging);
+  }
+
+  function endDrag() {
+    isDragging = false;
+    console.log("[isDragging);]", isDragging);
+  }
 </script>
 
 <Dialog.Root open={true}>
   {@render children()}
-  <Dialog.Content class="sm:max-w-[480px]">
+  <Dialog.Content class="sm:max-w-[480px] {isDragging ? 'opacity-10' : ''}">
     <Dialog.Header>
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>
@@ -72,7 +83,7 @@
             </Select.Root>
           </div>
 
-          <div class="flex flex-col gap-2 flex-1 h-full">
+          <div class="flex flex-col flex-1 h-full">
             <div class="flex items-center justify-between">
               <label
                 for="fontSize"
@@ -91,7 +102,7 @@
               step={FONT_SIZES}
               max={180}
               bind:value={$settings.fontSize}
-              class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
+              class="flex h-2 my-auto w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
             />
           </div>
         </div>
@@ -114,6 +125,8 @@
             min={-400}
             max={200}
             step={10}
+            onValueChange={startDrag}
+            onValueCommit={endDrag}
             bind:value={$settings.wordCenterOffset}
             class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
           />
@@ -174,7 +187,6 @@
                 >
                   <Checkbox
                     id="verticalTicks"
-                    type="checkbox"
                     bind:checked={$settings.verticalTicksVisible}
                     class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                   />

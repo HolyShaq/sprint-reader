@@ -35,8 +35,6 @@
     textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
   );
 
-  const offset = -300; // Use this to adjust x position of the word
-
   $effect(() => {
     currentWord;
     const firstHalfElement = document.getElementById("firstHalf");
@@ -57,7 +55,7 @@
       const orpLetterRect = orpLetterElement.getBoundingClientRect();
       const orpLetterWidth = orpLetterRect.width;
       const xOffset =
-        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 + offset;
+        firstHalfRect.left - orpLetterRect.left - orpLetterWidth / 2 + $settings.wordCenterOffset;
 
       firstHalfElement.style.transform = `translateX(${xOffset}px)`;
       orpLetterElement.style.transform = `translateX(${xOffset}px)`;
@@ -167,12 +165,12 @@
   ></div>
   <div
     class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
-    style:transform={`translate(${offset}px, -${300 - 8}px)`}
+    style:transform={`translate(${$settings.wordCenterOffset}px, -${300 - 8}px)`}
     style:height={`${100}px`}
   ></div>
   <div
     class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
-    style:transform={`translate(${offset}px, ${300}px)`}
+    style:transform={`translate(${$settings.wordCenterOffset}px, ${300}px)`}
     style:height={`${100}px`}
   ></div>
 
