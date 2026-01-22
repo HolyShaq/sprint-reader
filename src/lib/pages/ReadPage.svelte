@@ -26,9 +26,13 @@
   const firstHalf = $derived(currentWord.slice(0, orpIndex));
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
-  const wordsBefore = $derived(textArray.slice(textIndex - 3, textIndex) ?? []);
+
+  const wordChunkSize = 0;
+  const wordsBefore = $derived(
+    textArray.slice(Math.max(0, textIndex - wordChunkSize), textIndex) ?? [],
+  );
   const wordsAfter = $derived(
-    textArray.slice(textIndex + 1, textIndex + 4) ?? [],
+    textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
   );
 
   const offset = -300; // Use this to adjust x position of the word
