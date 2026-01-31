@@ -9,7 +9,7 @@
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
   import { settings } from "$lib/stores/settings";
-  import { Menu } from "@lucide/svelte";
+  import { Menu, Github, UserRound, HandCoins } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
@@ -76,15 +76,20 @@
   <!-- Footer -->
   <div
     transition:fade={{ duration: 100 }}
-    class="flex items-center justify-end gap-4 px-4 py-2 text-xs font-medium text-muted-foreground"
+    class="flex items-center justify-center sm:justify-end gap-4 px-4 py-2 text-xs font-medium text-muted-foreground"
   >
-    <span>Made by HolyShaq</span>
+    <span class="hidden sm:inline">Made by HolyShaq</span>
+    <UserRound class="sm:hidden" />
     <div class="h-full w-px bg-border"></div>
-    <span
+    <span class="hidden sm:inline"
       >Source on <a href="https://github.com/HolyShaq/bits-ui">GitHub</a></span
     >
+    <Github class="sm:hidden" />
     <div class="h-full w-px bg-border"></div>
-    <span>Support me on <a href="https://ko-fi.com/holysaq">Ko-fi</a></span>
+    <span class="hidden sm:inline"
+      >Support me on <a href="https://ko-fi.com/holysaq">Ko-fi</a></span
+    >
+    <HandCoins class="sm:hidden" />
     <div class="h-full w-px bg-border"></div>
     <ModeToggle />
   </div>
