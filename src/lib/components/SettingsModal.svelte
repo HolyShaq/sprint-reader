@@ -33,7 +33,7 @@
 <Dialog.Root>
   {@render children()}
   <Dialog.Overlay class={dimOnDrag && isDragging ? "bg-transparent" : "bg-black/50"} />
-  <Dialog.Content class="sm:max-w-[480px] {dimOnDrag && isDragging ? 'opacity-50' : ''}">
+  <Dialog.Content class="sm:max-w-[480px] max-h-[90vh] overflow-y-scroll {dimOnDrag && isDragging ? 'opacity-50' : ''}">
     <Dialog.Header>
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>
@@ -46,8 +46,8 @@
           Typography
         </h4>
 
-        <div class="flex items-start gap-4">
-          <div class="grid gap-2 flex-1">
+        <div class="flex flex-col sm:flex-row items-start gap-4">
+          <div class="w-full grid gap-2 flex-1">
             <label
               for="fontStyle"
               class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -74,7 +74,7 @@
             </Select.Root>
           </div>
 
-          <div class="flex flex-col flex-1 h-full">
+          <div class="flex flex-col flex-1 w-full h-full">
             <div class="flex items-center justify-between">
               <label
                 for="fontSize"
@@ -135,7 +135,7 @@
           Viewport
         </h4>
         <div class="grid gap-3">
-          <div class="flex">
+          <div class="flex flex-col gap-3 sm:flex-row sm:gap-0">
             <div class="flex flex-1 items-center space-x-2">
               <Checkbox
                 id="progressBar"
@@ -159,7 +159,7 @@
             </div>
           </div>
 
-          <div class="flex items-start">
+          <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 items-start">
             <div class="grid flex-1 gap-3">
               <div class="flex items-center space-x-2">
                 <Checkbox
