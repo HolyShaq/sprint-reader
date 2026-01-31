@@ -76,7 +76,7 @@
   <!-- Footer -->
   <div
     transition:fade={{ duration: 100 }}
-    class="flex items-center justify-end gap-4 px-4 py-2"
+    class="flex items-center justify-end gap-4 px-4 py-2 text-xs font-medium text-muted-foreground"
   >
     <span>Made by HolyShaq</span>
     <div class="h-full w-px bg-border"></div>
