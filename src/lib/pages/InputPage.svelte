@@ -42,7 +42,7 @@
   <div class="flex-grow flex justify-center items-center">
     <div
       transition:fly={{ duration: 180, y: 16, easing: cubicOut }}
-      class="w-full max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
+      class="w-full mx-8 max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
     >
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold">ReadMeFast</h1>
@@ -55,7 +55,7 @@
       <Textarea
         bind:value={text}
         placeholder="Enter text here"
-        class="min-h-60 max-h-[60vh]"
+        class="min-h-80 sm:min-h-60 max-h-[60vh]"
       />
       <div class="flex gap-2 items-center">
         <div class="flex-grow flex gap-4 items-center px-4">
