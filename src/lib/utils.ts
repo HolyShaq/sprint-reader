@@ -17,3 +17,6 @@ export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & {
 };
 
 export const stripTrailing = (word: string) => word.replace(/[)"'\]]+$/, "");
+
+export const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));

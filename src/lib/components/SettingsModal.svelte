@@ -2,9 +2,11 @@
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { FONT_SIZES, settings } from "$lib/stores/settings";
+  import { innerWidth } from "svelte/reactivity/window";
   import { Checkbox } from "./ui/checkbox";
   import Input from "./ui/input/input.svelte";
   import Slider from "./ui/slider/slider.svelte";
+  import { clamp } from "$lib/utils";
 
   // Ideally, this should come from a store or props
   let { children, dimOnDrag = false } = $props();
@@ -24,16 +26,49 @@
   ];
 
   const triggerContent = $derived(
-    fonts.find((f) => f.value === $settings.fontStyle)?.label ?? "Select a font",
+    fonts.find((f) => f.value === $settings.fontStyle)?.label ??
+      "Select a font",
   );
 
   let isDragging = $state(false);
+
+  const minOffsetPercentage = 0.25;
+  const maxOffsetPercentage = 0.6;
+  const isMobile = $derived.by(() => {
+    if (innerWidth.current) {
+      return innerWidth.current < 640;
+    }
+    return false;
+  });
+
+  const { minOffset, maxOffset } = $derived.by(() => {
+    if (innerWidth.current) {
+      const minPos = innerWidth.current * minOffsetPercentage;
+      const maxPos = innerWidth.current * maxOffsetPercentage;
+
+      const midpoint = innerWidth.current / 2;
+
+      const minOffset = Math.floor(-Math.abs(midpoint - minPos) / 10) * 10;
+      const maxOffset = Math.floor(Math.abs(midpoint - maxPos) / 10) * 10;
+
+      return { minOffset, maxOffset };
+    }
+
+    return { minOffset: 0, maxOffset: 0 };
+  });
 </script>
 
 <Dialog.Root>
   {@render children()}
-  <Dialog.Overlay class={dimOnDrag && isDragging ? "bg-transparent" : "bg-black/50"} />
-  <Dialog.Content class="sm:max-w-[480px] max-h-[90vh] overflow-y-scroll {dimOnDrag && isDragging ? 'opacity-50' : ''}">
+  <Dialog.Overlay
+    class={dimOnDrag && isDragging ? "bg-transparent" : "bg-black/50"}
+  />
+  <Dialog.Content
+    class="sm:max-w-[480px] max-h-[90vh] overflow-y-scroll {dimOnDrag &&
+    isDragging
+      ? 'opacity-50'
+      : ''}"
+  >
     <Dialog.Header>
       <Dialog.Title>Settings</Dialog.Title>
     </Dialog.Header>
@@ -100,30 +135,32 @@
           </div>
         </div>
 
-        <div class="grid gap-2">
-          <div class="flex items-center justify-between">
-            <label
-              for="offset"
-              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Offset
-            </label>
-            <span class="text-sm text-muted-foreground"
-              >{$settings.wordCenterOffset}px</span
-            >
+        {#if !isMobile}
+          <div class="grid gap-2">
+            <div class="flex items-center justify-between">
+              <label
+                for="offset"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Offset
+              </label>
+              <span class="text-sm text-muted-foreground"
+                >{$settings.wordCenterOffset}px</span
+              >
+            </div>
+            <Slider
+              id="offset"
+              type="single"
+              min={minOffset}
+              max={maxOffset}
+              step={10}
+              onValueChange={() => (isDragging = true)}
+              onValueCommit={() => (isDragging = false)}
+              bind:value={$settings.wordCenterOffset}
+              class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
+            />
           </div>
-          <Slider
-            id="offset"
-            type="single"
-            min={-400}
-            max={200}
-            step={10}
-            onValueChange={() => (isDragging = true)}
-            onValueCommit={() => (isDragging = false)}
-            bind:value={$settings.wordCenterOffset}
-            class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
-          />
-        </div>
+        {/if}
       </div>
 
       <hr class="border-border" />

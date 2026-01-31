@@ -4,6 +4,7 @@
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Trigger } from "$lib/components/ui/dialog";
   import { Slider } from "$lib/components/ui/slider";
+  import { innerWidth } from "svelte/reactivity/window";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
   import { Menu, X } from "@lucide/svelte";
@@ -34,6 +35,14 @@
     textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
   );
 
+  const isMobile = $derived.by(() => {
+    if (innerWidth.current) {
+      return innerWidth.current < 640;
+    }
+    return false;
+  });
+  const centerOffset = $derived(isMobile ? 0 : $settings.wordCenterOffset);
+
   $effect(() => {
     if (!browser) return;
 
@@ -56,10 +65,10 @@
         firstHalfRect.left -
         orpLetterRect.left -
         orpLetterWidth / 2 +
-        $settings.wordCenterOffset;
+        centerOffset;
     } else {
       const wordRect = wordElement!.getBoundingClientRect();
-      xOffset = -wordRect.width / 2 + $settings.wordCenterOffset;
+      xOffset = -wordRect.width / 2 + centerOffset;
     }
     wordElement.style.transform = `translateX(${xOffset}px)`;
   });
@@ -183,13 +192,13 @@
       <div
         transition:fade={{ duration: 100 }}
         class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
-        style:transform={`translate(${$settings.wordCenterOffset}px, -${300 - 8}px)`}
+        style:transform={`translate(${centerOffset}px, -${300 - 8}px)`}
         style:height={`${100}px`}
       ></div>
       <div
         transition:fade={{ duration: 100 }}
         class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
-        style:transform={`translate(${$settings.wordCenterOffset}px, ${300}px)`}
+        style:transform={`translate(${centerOffset}px, ${300}px)`}
         style:height={`${100}px`}
       ></div>
     {/if}

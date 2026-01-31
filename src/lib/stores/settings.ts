@@ -24,7 +24,7 @@ export type Settings = {
 const defaultSettings = {
   fontStyle: "sans-serif",
   fontSize: 128,
-  wordCenterOffset: -300,
+  wordCenterOffset: 0,
   progressBarVisible: true,
   progressTextVisible: true,
   guidelineVisible: true,
