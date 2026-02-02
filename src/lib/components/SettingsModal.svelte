@@ -7,6 +7,7 @@
   import Input from "./ui/input/input.svelte";
   import Slider from "./ui/slider/slider.svelte";
   import { clamp } from "$lib/utils";
+  import SettingsTooltip from "./SettingsTooltip.svelte";
 
   // Ideally, this should come from a store or props
   let { children, dimOnDrag = false } = $props();
@@ -142,7 +143,12 @@
                 for="offset"
                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Offset
+                <div class="flex items-center gap-2">
+                  Offset
+                  <SettingsTooltip
+                    text="Offset of the word from the center of the viewport (a little bit to the left is optional)"
+                  />
+                </div>
               </label>
               <span class="text-sm text-muted-foreground"
                 >{$settings.wordCenterOffset}px</span
@@ -208,7 +214,12 @@
                   for="guidelines"
                   class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Guidelines
+                  <div class="flex items-center gap-2">
+                    Guidelines
+                    <SettingsTooltip
+                      text="Visual aid to help direct your eyes to the word"
+                    />
+                  </div>
                 </label>
               </div>
               {#if $settings.guidelineVisible}
@@ -241,7 +252,12 @@
                   for="centerOnOrp"
                   class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Center on ORP
+                  <div class="flex items-center gap-2">
+                    Center on ORP
+                    <SettingsTooltip
+                      text="Center the word on its Optimal Recognition Point (ORP)"
+                    />
+                  </div>
                 </label>
               </div>
               {#if $settings.centerOnOrp}
@@ -275,7 +291,9 @@
                 for="chunkVisible"
                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Chunk Display
+                <div class="flex items-center gap-2">Chunk Display
+                  <SettingsTooltip text="Display the words surrounding the current word" />
+                </div>
               </label>
             </div>
             {#if $settings.chunkVisible}
@@ -287,7 +305,9 @@
                     for="chunkSize"
                     class="text-xs font-medium text-muted-foreground"
                   >
-                    Chunk Size
+                    <div class="flex items-center gap-2">Chunk Size
+                      <SettingsTooltip text="Number of words to display around the current word" />
+                    </div>
                   </label>
                   <Input
                     id="chunkSize"
@@ -324,7 +344,9 @@
               for="uniformWordTiming"
               class="text-sm font-medium leading-none"
             >
-              Dynamic Word Timing
+              <div class="flex items-center gap-2">Dynamic Word Timing
+                <SettingsTooltip text="Delay the timing for the next word on punctuations" />
+              </div>
             </label>
           </div>
 
@@ -337,7 +359,9 @@
                   for="softStop"
                   class="text-xs font-medium text-muted-foreground"
                 >
-                  Soft Stop Mult.
+                  <div class="flex items-center gap-2">Soft Stop Mult.
+                    <SettingsTooltip text="Delay for ',' and ';'" />
+                  </div>
                 </label>
                 <Input
                   id="softStop"
@@ -352,7 +376,9 @@
                   for="hardStop"
                   class="text-xs font-medium text-muted-foreground"
                 >
-                  Hard Stop Mult.
+                  <div class="flex items-center gap-2">Hard Stop Mult.
+                    <SettingsTooltip text="Delay for '.', '!', and '?'" />
+                  </div>
                 </label>
                 <Input
                   id="hardStop"
