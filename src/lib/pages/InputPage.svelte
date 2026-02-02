@@ -8,8 +8,9 @@
   import { Trigger } from "$lib/components/ui/dialog";
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
+  import { getRandomPreset } from "$lib/preset";
   import { settings } from "$lib/stores/settings";
-  import { Menu, Github, UserRound, HandCoins } from "@lucide/svelte";
+  import { Menu, Sparkles, Github, UserRound, HandCoins } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
@@ -24,6 +25,14 @@
     if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
       onSubmit();
     }
+  };
+
+  const generateRandomPreset = () => {
+    let randomPreset = getRandomPreset();
+    while (randomPreset === text) {
+      randomPreset = getRandomPreset();
+    }
+    text = randomPreset;
   };
 
   onMount(() => {
@@ -45,7 +54,16 @@
       class="w-full mx-8 max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
     >
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold">ReadMeFast</h1>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl font-bold">ReadMeFast</h1>
+          <Button
+            onclick={generateRandomPreset}
+            variant="ghost"
+            class="rounded-full p-0 w-8 h-8"
+          >
+            <Sparkles class="size-4" />
+          </Button>
+        </div>
         <SettingsModal>
           <Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
             <Menu />
