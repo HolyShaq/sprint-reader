@@ -27,12 +27,12 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
-  const wordChunkSize = 0;
+  const chunkSize = $derived($settings.chunkVisible ? $settings.chunkSize : 0);
   const wordsBefore = $derived(
-    textArray.slice(Math.max(0, textIndex - wordChunkSize), textIndex) ?? [],
+    textArray.slice(Math.max(0, textIndex - chunkSize), textIndex) ?? [],
   );
   const wordsAfter = $derived(
-    textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
+    textArray.slice(textIndex + 1, textIndex + chunkSize + 1) ?? [],
   );
 
   const isMobile = $derived.by(() => {
@@ -155,10 +155,13 @@
     class="flex items-end gap-8 absolute top-1/2 left-1/2 -translate-y-1/2 whitespace-nowrap"
   >
     <div id="wordBefore" class="flex space-x-8">
-      {#each wordsBefore as word}
-        <h1 class="text-muted-foreground/50">{word}</h1>
-      {/each}
+      {#if $settings.chunkVisible}
+        {#each wordsBefore as word}
+          <h1 class="text-muted-foreground/50">{word}</h1>
+        {/each}
+      {/if}
     </div>
+
     <h1 class="flex gap-0 font-bold">
       <span id="firstHalf">{firstHalf}</span>
       <span
@@ -169,10 +172,13 @@
       >
       <span id="secondHalf">{secondHalf}</span>
     </h1>
+
     <div id="wordAfter" class="flex space-x-8">
-      {#each wordsAfter as word}
-        <h1 class="text-muted-foreground/50">{word}</h1>
-      {/each}
+      {#if $settings.chunkVisible}
+        {#each wordsAfter as word}
+          <h1 class="text-muted-foreground/50">{word}</h1>
+        {/each}
+      {/if}
     </div>
   </div>
 
