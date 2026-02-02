@@ -15,6 +15,8 @@ export type Settings = {
   verticalTicksVisible: boolean;
   centerOnOrp: boolean;
   orpHighlight: boolean;
+  chunkVisible: boolean;
+  chunkSize: number;
   dynamicWordTiming: boolean;
   softStopMultiplier: number;
   hardStopMultiplier: number;
@@ -31,6 +33,8 @@ const defaultSettings = {
   verticalTicksVisible: true,
   centerOnOrp: true,
   orpHighlight: true,
+  chunkVisible: false,
+  chunkSize: 5,
   dynamicWordTiming: true,
   softStopMultiplier: 1.5,
   hardStopMultiplier: 2.5,

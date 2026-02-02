@@ -263,6 +263,45 @@
               {/if}
             </div>
           </div>
+
+          <div class="grid flex-1 gap-3">
+            <div class="flex items-center space-x-2">
+              <Checkbox
+                id="chunkVisible"
+                bind:checked={$settings.chunkVisible}
+                class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+              />
+              <label
+                for="chunkVisible"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Chunk Display
+              </label>
+            </div>
+            {#if $settings.chunkVisible}
+              <div
+                class="ml-6 grid sm:grid-cols-2 gap-4 items-center space-x-2 animate-in slide-in-from-top-1 fade-in duration-200"
+              >
+                <div class="grid gap-1.5">
+                  <label
+                    for="chunkSize"
+                    class="text-xs font-medium text-muted-foreground"
+                  >
+                    Chunk Size
+                  </label>
+                  <Input
+                    id="chunkSize"
+                    type="number"
+                    min="1"
+                    max="10"
+                    step="1"
+                    bind:value={$settings.chunkSize}
+                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  />
+                </div>
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
 
