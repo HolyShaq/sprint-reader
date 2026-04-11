@@ -2,6 +2,64 @@
 
 @import "tw-animate-css";
 
+/* Fonts */
+
+@font-face {
+  font-family: 'inter';
+  src: url('/fonts/inter.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'roboto';
+  src: url('/fonts/roboto.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'open-sans';
+  src: url('/fonts/open-sans.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'charter';
+  src: url('/fonts/charter.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'merriweather';
+  src: url('/fonts/merriweather.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'jetbrains-mono';
+  src: url('/fonts/jetbrains-mono.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'raleway';
+  src: url('/fonts/raleway.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { FONT_SIZES, settings } from "$lib/stores/settings";
+  import { FONT_SIZES, FONT_STYLES, settings } from "$lib/stores/settings";
   import { innerWidth } from "svelte/reactivity/window";
   import { Checkbox } from "./ui/checkbox";
   import Input from "./ui/input/input.svelte";
@@ -11,22 +11,8 @@
   // Ideally, this should come from a store or props
   let { children, dimOnDrag = false } = $props();
 
-  const fonts = [
-    { value: "sans-serif", label: "Sans Serif" },
-    { value: "inter", label: "Inter" },
-    { value: "roboto", label: "Roboto" },
-    { value: "open-sans", label: "Open Sans" },
-    { value: "source-sans-3", label: "Source Sans 3" },
-    { value: "helvetica", label: "Helvetica" },
-    { value: "arial", label: "Arial" },
-    { value: "verdana", label: "Verdana" },
-    { value: "georgia", label: "Georgia" },
-    { value: "times-new-roman", label: "Times New Roman" },
-    { value: "courier-new", label: "Courier New" },
-  ];
-
   const triggerContent = $derived(
-    fonts.find((f) => f.value === $settings.fontStyle)?.label ??
+    FONT_STYLES.find((f) => f.value === $settings.fontStyle)?.label ??
       "Select a font",
   );
 
@@ -95,12 +81,18 @@
               bind:value={$settings.fontStyle}
             >
               <Select.Trigger class="w-full">
-                {triggerContent}
+                <span style="font-family: {$settings.fontStyle};">
+                  {triggerContent}
+                </span>
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
-                  {#each fonts as font (font.value)}
-                    <Select.Item value={font.value} label={font.label}>
+                  {#each FONT_STYLES as font (font.value)}
+                    <Select.Item
+                      style="font-family: {font.value};"
+                      value={font.value}
+                      label={font.label}
+                    >
                       {font.label}
                     </Select.Item>
                   {/each}
