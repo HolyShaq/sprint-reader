@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { PRESET_INPUTS } from "./presetInputs";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,3 +21,7 @@ export const stripTrailing = (word: string) => word.replace(/[)"'\]]+$/, "");
 
 export const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
+
+export const getRandomPresetInput = () => {
+  return PRESET_INPUTS[Math.floor(Math.random() * PRESET_INPUTS.length)];
+} 

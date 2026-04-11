@@ -9,7 +9,8 @@
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
   import { settings } from "$lib/stores/settings";
-  import { Menu, Github, UserRound, HandCoins } from "@lucide/svelte";
+  import { getRandomPresetInput } from "$lib/utils";
+  import { Menu, Github, UserRound, HandCoins, Sparkle } from "@lucide/svelte";
   import { onDestroy, onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
@@ -35,6 +36,14 @@
     if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
   });
+
+  const handleGeneratePresetPress = () => {
+    let newPresetInput = text;
+    while (text == newPresetInput) {
+      newPresetInput = getRandomPresetInput();
+    }
+    text = newPresetInput;
+  };
 </script>
 
 <div class="fixed inset-0 flex flex-col">
@@ -45,7 +54,16 @@
       class="w-full mx-8 max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
     >
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold">ReadMeFast</h1>
+        <div class="flex gap-4 items-center">
+          <h1 class="text-2xl font-bold">ReadMeFast</h1>
+          <Button
+            onclick={handleGeneratePresetPress}
+            variant="outline"
+            size="icon"
+          >
+            <Sparkle />
+          </Button>
+        </div>
         <SettingsModal>
           <Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
             <Menu />
