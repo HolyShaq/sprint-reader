@@ -264,16 +264,21 @@
             </div>
           </div>
 
-          <div class="flex flex-1 items-center space-x-2">
-            <Checkbox
-              id="controlPanel"
-              bind:checked={$settings.controlPanelVisible}
-              class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
-            />
-            <label for="controlPanel" class="text-sm font-medium leading-none">
-              Control Panel</label
-            >
-          </div>
+          {#if !isMobile}
+            <div class="flex flex-1 items-center space-x-2">
+              <Checkbox
+                id="controlPanel"
+                bind:checked={$settings.controlPanelVisible}
+                class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+              />
+              <label
+                for="controlPanel"
+                class="text-sm font-medium leading-none"
+              >
+                Control Panel</label
+              >
+            </div>
+          {/if}
         </div>
       </div>
 

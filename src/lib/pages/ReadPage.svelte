@@ -49,6 +49,9 @@
     return false;
   });
   const centerOffset = $derived(isMobile ? 0 : $settings.wordCenterOffset);
+  const controlPanelVisible = $derived(
+    isMobile ? true : $settings.controlPanelVisible,
+  );
   const atFirstWord = $derived(textIndex === 0);
   const atLastWord = $derived(textIndex === textArray.length - 1);
 
@@ -228,20 +231,27 @@
 
   <!-- Progress Bar -->
   <div
-    class="absolute w-full h-6 px-12 gap-4 flex justify-end top-1/2 items-center"
+    class="absolute w-full h-6 px-4 sm:px-12 gap-4 flex justify-end top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
-    {#if $settings.controlPanelVisible}
+    {#if controlPanelVisible}
       <div class="flex items-center mt-2">
         <Button
           onclick={goToPrevWord}
           variant="ghost"
           size="icon"
-          class={atFirstWord ? "pointer-events-none opacity-50" : "cursor-pointer"}
+          class={atFirstWord
+            ? "pointer-events-none opacity-50"
+            : "cursor-pointer"}
         >
           <ChevronLeft />
         </Button>
-        <Button onclick={togglePlay} variant="ghost" size="icon" class="cursor-pointer">
+        <Button
+          onclick={togglePlay}
+          variant="ghost"
+          size="icon"
+          class="cursor-pointer"
+        >
           {#if !isPlaying}
             <Play />
           {:else}
@@ -252,7 +262,9 @@
           onclick={goToNextWord}
           variant="ghost"
           size="icon"
-          class={atLastWord ? "pointer-events-none opacity-50" : "cursor-pointer"}
+          class={atLastWord
+            ? "pointer-events-none opacity-50"
+            : "cursor-pointer"}
         >
           <ChevronRight />
         </Button>
