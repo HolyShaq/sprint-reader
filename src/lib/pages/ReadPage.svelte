@@ -34,7 +34,16 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
-  const wordChunkSize = 0;
+  const isMobile = $derived.by(() => {
+    if (innerWidth.current) {
+      return innerWidth.current < 640;
+    }
+    return false;
+  });
+
+  const wordChunkSize = $derived(
+    isMobile || !$settings.wordChunksVisible ? 0 : $settings.wordChunkSize,
+  );
   const wordsBefore = $derived(
     textArray.slice(Math.max(0, textIndex - wordChunkSize), textIndex) ?? [],
   );
@@ -42,12 +51,6 @@
     textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
   );
 
-  const isMobile = $derived.by(() => {
-    if (innerWidth.current) {
-      return innerWidth.current < 640;
-    }
-    return false;
-  });
   const centerOffset = $derived(isMobile ? 0 : $settings.wordCenterOffset);
   const controlPanelVisible = $derived(
     isMobile ? true : $settings.controlPanelVisible,

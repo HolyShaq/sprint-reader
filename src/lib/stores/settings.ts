@@ -25,6 +25,8 @@ export type Settings = {
   fontStyle: string;
   fontSize: FontSizes;
   wordCenterOffset: number;
+  wordChunksVisible: boolean;
+  wordChunkSize: number;
   progressBarVisible: boolean;
   progressTextVisible: boolean;
   guidelineVisible: boolean;
@@ -42,6 +44,8 @@ const defaultSettings = {
   fontStyle: "inter",
   fontSize: 128,
   wordCenterOffset: 0,
+  wordChunksVisible: true,
+  wordChunkSize: 5,
   progressBarVisible: true,
   progressTextVisible: true,
   guidelineVisible: true,

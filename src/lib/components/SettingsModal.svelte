@@ -257,18 +257,49 @@
           </div>
 
           {#if !isMobile}
-            <div class="flex flex-1 items-center space-x-2">
-              <Checkbox
-                id="controlPanel"
-                bind:checked={$settings.controlPanelVisible}
-                class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
-              />
-              <label
-                for="controlPanel"
-                class="text-sm font-medium leading-none"
-              >
-                Control Panel</label
-              >
+            <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 items-start">
+              <div class="flex flex-1 items-center space-x-2">
+                <Checkbox
+                  id="controlPanel"
+                  bind:checked={$settings.controlPanelVisible}
+                  class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                />
+                <label
+                  for="controlPanel"
+                  class="text-sm font-medium leading-none"
+                >
+                  Control Panel</label
+                >
+              </div>
+
+              <div class="grid flex-1 gap-3">
+                <div class="flex items-center space-x-2">
+                  <Checkbox
+                    id="wordChunkVisibile"
+                    bind:checked={$settings.wordChunksVisible}
+                    class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                  />
+                  <label
+                    for="wordChunkVisibile"
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Word Chunks
+                  </label>
+                </div>
+                {#if $settings.wordChunksVisible}
+                  <div class="pl-6">
+                    <Input
+                      id="wordChunkSize"
+                      type="number"
+                      step="1"
+                      min="1"
+                      max="6"
+                      bind:value={$settings.wordChunkSize}
+                      class="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    />
+                  </div>
+                {/if}
+              </div>
             </div>
           {/if}
         </div>
