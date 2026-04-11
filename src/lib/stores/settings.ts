@@ -13,6 +13,7 @@ export type Settings = {
   progressTextVisible: boolean;
   guidelineVisible: boolean;
   verticalTicksVisible: boolean;
+  controlPanelVisible: boolean;
   centerOnOrp: boolean;
   orpHighlight: boolean;
   dynamicWordTiming: boolean;
@@ -29,6 +30,7 @@ const defaultSettings = {
   progressTextVisible: true,
   guidelineVisible: true,
   verticalTicksVisible: true,
+  controlPanelVisible: true,
   centerOnOrp: true,
   orpHighlight: true,
   dynamicWordTiming: true,

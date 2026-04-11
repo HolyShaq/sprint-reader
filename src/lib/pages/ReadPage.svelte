@@ -7,7 +7,14 @@
   import { innerWidth } from "svelte/reactivity/window";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
-  import { Menu, X } from "@lucide/svelte";
+  import {
+    ChevronLeft,
+    ChevronRight,
+    Menu,
+    Pause,
+    Play,
+    X,
+  } from "@lucide/svelte";
   import clsx from "clsx";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -42,6 +49,8 @@
     return false;
   });
   const centerOffset = $derived(isMobile ? 0 : $settings.wordCenterOffset);
+  const atFirstWord = $derived(textIndex === 0);
+  const atLastWord = $derived(textIndex === textArray.length - 1);
 
   $effect(() => {
     if (!browser) return;
@@ -90,18 +99,31 @@
     );
   };
 
+  // Utility Functions for controlling reader
+  const goToPrevWord = () => {
+    textIndex = Math.max(0, textIndex - 1);
+  };
+
+  const goToNextWord = () => {
+    textIndex = Math.min(textArray.length - 1, textIndex + 1);
+  };
+
+  const togglePlay = () => {
+    isPlaying = !isPlaying;
+    if (isPlaying) nextWord();
+    else if (nextWordTimeout) {
+      clearTimeout(nextWordTimeout);
+      nextWordTimeout = null;
+    }
+  };
+
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "ArrowLeft") {
-      textIndex = Math.max(0, textIndex - 1);
+      goToPrevWord();
     } else if (event.code === "ArrowRight") {
-      textIndex = Math.min(textArray.length - 1, textIndex + 1);
+      goToNextWord();
     } else if (event.code === "Space") {
-      isPlaying = !isPlaying;
-      if (isPlaying) nextWord();
-      else if (nextWordTimeout) {
-        clearTimeout(nextWordTimeout);
-        nextWordTimeout = null;
-      }
+      togglePlay();
     } else if (event.code === "Escape") {
       onBack();
     }
@@ -209,6 +231,34 @@
     class="absolute w-full h-6 px-12 gap-4 flex justify-end top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
+    {#if $settings.controlPanelVisible}
+      <div class="flex items-center mt-2">
+        <Button
+          onclick={goToPrevWord}
+          variant="ghost"
+          size="icon"
+          class={atFirstWord ? "pointer-events-none opacity-50" : "cursor-pointer"}
+        >
+          <ChevronLeft />
+        </Button>
+        <Button onclick={togglePlay} variant="ghost" size="icon" class="cursor-pointer">
+          {#if !isPlaying}
+            <Play />
+          {:else}
+            <Pause />
+          {/if}
+        </Button>
+        <Button
+          onclick={goToNextWord}
+          variant="ghost"
+          size="icon"
+          class={atLastWord ? "pointer-events-none opacity-50" : "cursor-pointer"}
+        >
+          <ChevronRight />
+        </Button>
+      </div>
+    {/if}
+
     {#if $settings.progressBarVisible}
       <div class="flex-grow mt-2" transition:fade={{ duration: 100 }}>
         <Slider
@@ -226,7 +276,7 @@
     {#if $settings.progressTextVisible}
       <span
         transition:fade={{ duration: 100 }}
-        class="whitespace-nowrap {isPlaying
+        class="mt-2 whitespace-nowrap {isPlaying
           ? 'text-muted'
           : ''} transition-colors duration-100"
         >{textIndex + 1} / {textArray.length}</span
