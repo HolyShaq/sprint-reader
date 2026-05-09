@@ -127,6 +127,14 @@
     }
   };
 
+  const increaseWPM = () => {
+    $settings.wpm = $settings.wpm + 10;
+  };
+
+  const decreaseWPM = () => {
+    $settings.wpm = $settings.wpm - 10;
+  };
+
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "ArrowLeft") {
       goToPrevWord();
@@ -137,6 +145,10 @@
       togglePlay();
     } else if (event.code === "Escape") {
       onBack();
+    } else if (event.code === "ArrowUp") {
+      increaseWPM();
+    } else if (event.code === "ArrowDown") {
+      decreaseWPM();
     }
   };
 
