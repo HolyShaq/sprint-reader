@@ -243,9 +243,10 @@
           onclick={goToPrevWord}
           variant="ghost"
           size="icon"
-          class={atFirstWord
-            ? "pointer-events-none opacity-50"
-            : "cursor-pointer"}
+          class={clsx(
+            isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
+            atFirstWord ? "pointer-events-none opacity-50" : "cursor-pointer",
+          )}
         >
           <ChevronLeft />
         </Button>
@@ -253,7 +254,9 @@
           onclick={togglePlay}
           variant="ghost"
           size="icon"
-          class="cursor-pointer"
+          class="cursor-pointer {isPlaying
+            ? 'text-accent-foreground/20'
+            : 'text-accent-foreground'}"
         >
           {#if !isPlaying}
             <Play />
@@ -265,9 +268,10 @@
           onclick={goToNextWord}
           variant="ghost"
           size="icon"
-          class={atLastWord
-            ? "pointer-events-none opacity-50"
-            : "cursor-pointer"}
+          class={clsx(
+            isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
+            atLastWord ? "pointer-events-none opacity-50" : "cursor-pointer",
+          )}
         >
           <ChevronRight />
         </Button>
