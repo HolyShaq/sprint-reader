@@ -129,6 +129,7 @@
     } else if (event.code === "ArrowRight") {
       goToNextWord();
     } else if (event.code === "Space") {
+      event.preventDefault();
       togglePlay();
     } else if (event.code === "Escape") {
       onBack();
