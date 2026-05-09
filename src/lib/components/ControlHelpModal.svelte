@@ -27,9 +27,10 @@
           >
             <p class="text-muted-foreground text-sm">
               Use
-              <Kbd.Root>{"<-"}</Kbd.Root> and
-              <Kbd.Root>{"->"}</Kbd.Root>
+              <Kbd.Root>{"<-"}</Kbd.Root> and <Kbd.Root>{"->"}</Kbd.Root>
               to navigate. Use
+              <Kbd.Root>{"↑"}</Kbd.Root> and <Kbd.Root>{"↓"}</Kbd.Root>
+              to control WPM. Use
               <Kbd.Root>Space</Kbd.Root>
               to toggle play.
             </p>
