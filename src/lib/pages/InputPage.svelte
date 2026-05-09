@@ -96,19 +96,31 @@
     transition:fade={{ duration: 100 }}
     class="flex items-center justify-center sm:justify-end gap-4 px-4 py-2 text-xs font-medium text-muted-foreground"
   >
-    <span class="hidden sm:inline">Made by HolyShaq</span>
-    <UserRound class="sm:hidden" />
+    <!-- Portfolio -->
+    <a href="https://acehalili-portfolio.vercel.app/" target="_blank">
+      <span class="hidden sm:inline hover:underline">Made by HolyShaq</span>
+      <UserRound class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
-    <span class="hidden sm:inline"
-      >Source on <a href="https://github.com/HolyShaq/bits-ui">GitHub</a></span
-    >
-    <Github class="sm:hidden" />
+
+    <!-- Github -->
+    <a target="_blank" href="https://github.com/HolyShaq/readmefast">
+      <span class="hidden sm:inline hover:underline">Source on Github</span>
+      <Github class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
-    <span class="hidden sm:inline"
-      >Support me on <a href="https://ko-fi.com/holysaq">Ko-fi</a></span
-    >
-    <HandCoins class="sm:hidden" />
+
+    <!-- Ko-fi -->
+    <a href="https://ko-fi.com/holyshaq" target="_blank">
+      <span class="hidden sm:inline hover:underline">Support me on Ko-fi</span>
+      <HandCoins class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
+
+    <!-- Mode Toggle -->
     <ModeToggle />
   </div>
 </div>
