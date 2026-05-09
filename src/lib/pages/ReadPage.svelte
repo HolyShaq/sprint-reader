@@ -18,7 +18,7 @@
   } from "@lucide/svelte";
   import clsx from "clsx";
   import { onDestroy, onMount } from "svelte";
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import ControlHelpModal from "$lib/components/ControlHelpModal.svelte";
   import Popover from "$lib/components/ui/popover/popover.svelte";
   import PopoverTrigger from "$lib/components/ui/popover/popover-trigger.svelte";
@@ -30,6 +30,7 @@
   let { text, onBack }: Props = $props();
 
   let textIndex = $state(0);
+  let wpmVisible = $state(false);
   const textArray = $derived(text.trim().split(/\s+/));
   const currentWord = $derived(textArray[textIndex] ?? "");
 
@@ -135,6 +136,11 @@
     $settings.wpm = $settings.wpm - 10;
   };
 
+  let wpmVisibilityTimeout: number | null = null;
+  const setupWPMVisibilityTimeout = () => {
+    if (wpmVisibilityTimeout) clearTimeout(wpmVisibilityTimeout);
+    wpmVisibilityTimeout = setTimeout(() => (wpmVisible = false), 1000);
+  };
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "ArrowLeft") {
       goToPrevWord();
@@ -146,9 +152,13 @@
     } else if (event.code === "Escape") {
       onBack();
     } else if (event.code === "ArrowUp") {
+      wpmVisible = true;
       increaseWPM();
+      setupWPMVisibilityTimeout();
     } else if (event.code === "ArrowDown") {
+      wpmVisible = true;
       decreaseWPM();
+      setupWPMVisibilityTimeout();
     }
   };
 
@@ -342,4 +352,13 @@
       </PopoverTrigger>
     </ControlHelpModal>
   </div>
+
+  {#if wpmVisible}
+    <div
+      transition:fly={{ y: 16, duration: 100 }}
+      class="absolute bottom-4 right-4"
+    >
+      {$settings.wpm} wpm
+    </div>
+  {/if}
 </div>
