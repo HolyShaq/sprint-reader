@@ -10,6 +10,7 @@
   import {
     ChevronLeft,
     ChevronRight,
+    CircleQuestionMark,
     Menu,
     Pause,
     Play,
@@ -18,6 +19,9 @@
   import clsx from "clsx";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import ControlHelpModal from "$lib/components/ControlHelpModal.svelte";
+  import Popover from "$lib/components/ui/popover/popover.svelte";
+  import PopoverTrigger from "$lib/components/ui/popover/popover-trigger.svelte";
 
   interface Props {
     text: string;
@@ -302,5 +306,28 @@
         >{textIndex + 1} / {textArray.length}</span
       >
     {/if}
+  </div>
+
+  <div class="absolute bottom-2 left-2">
+    <ControlHelpModal>
+      <PopoverTrigger
+        openOnHover
+        openDelay={100}
+        closeDelay={100}
+        class={clsx(
+          isPlaying ? "pointer-events-none" : "",
+          buttonVariants({
+            variant: "ghost",
+            class: "size-8 rounded-full",
+          }),
+        )}
+      >
+        <CircleQuestionMark
+          class="{isPlaying
+            ? 'text-muted-foreground/20'
+            : 'text-muted-foreground'} size-6"
+        />
+      </PopoverTrigger>
+    </ControlHelpModal>
   </div>
 </div>
