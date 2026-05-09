@@ -20,7 +20,6 @@
   import { onDestroy, onMount } from "svelte";
   import { fade, fly } from "svelte/transition";
   import ControlHelpModal from "$lib/components/ControlHelpModal.svelte";
-  import Popover from "$lib/components/ui/popover/popover.svelte";
   import PopoverTrigger from "$lib/components/ui/popover/popover-trigger.svelte";
 
   interface Props {
@@ -162,14 +161,32 @@
     }
   };
 
+  // Handle Mouse Wheel Scroll
+  let lastScrollTime = 0;
+  const scrollDelay = 10; // Milliseconds between allowed scroll-steps
+
+  const handleWheel = (event: WheelEvent) => {
+    const now = Date.now();
+    if (now - lastScrollTime < scrollDelay) return;
+
+    if (Math.abs(event.deltaY) > 5) {
+      // Threshold to ignore tiny movements
+      if (event.deltaY > 0) goToNextWord();
+      else goToPrevWord();
+      lastScrollTime = now;
+    }
+  };
+
   onMount(() => {
     if (!browser) return;
     document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("wheel", handleWheel, { passive: false });
   });
 
   onDestroy(() => {
     if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
+    window.removeEventListener("wheel", handleWheel);
     if (nextWordTimeout) clearTimeout(nextWordTimeout);
   });
 </script>
