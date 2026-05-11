@@ -1,38 +1,99 @@
-# sv
+# ReadMeFast
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A Rapid Serial Visual Presentation (RSVP) speed reading web app. ReadMeFast displays text one word at a time in a fixed position, eliminating eye movement and highlighting each word's **Optimal Recognition Point (ORP)** — the letter where the brain recognizes words fastest.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **RSVP Reader** — word-by-word display with ORP highlighting and adjustable speed (50–1000 WPM)
+- **Dynamic timing** — automatic delays after punctuation (commas, periods, etc.) for natural pacing
+- **Typography controls** — choose from 9 font families and adjust font size and word offset
+- **Visual aids** — optional progress bar, guidelines, word chunks, and control panel
+- **Dark / light mode** — system-aware theme with a manual toggle
+- **Persistent settings** — all preferences saved to `localStorage` and restored on next visit
+- **Demo content** — built-in preset texts and longer article excerpts to get started instantly
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Tech Stack
 
-# create a new project in my-app
-npx sv create my-app
+| Layer | Technology |
+|---|---|
+| Framework | [SvelteKit](https://kit.svelte.dev/) + Svelte 5 |
+| Styling | Tailwind CSS 4, bits-ui, Lucide icons |
+| Language | TypeScript (strict) |
+| Build | Vite 7 |
+| Deployment | Netlify (via `@sveltejs/adapter-netlify`) |
+| Persistence | svelte-persisted-store (localStorage) |
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Install
+
+```bash
+npm install
 ```
 
-## Developing
+### Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open `http://localhost:5173` in your browser.
 
-To create a production version of your app:
+### Production Build
 
-```sh
+```bash
 npm run build
+npm run preview   # preview the built output locally
 ```
 
-You can preview the production build with `npm run preview`.
+### Type Checking
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run check          # run once
+npm run check:watch    # watch mode
+```
+
+## Project Structure
+
+```
+src/
+├── routes/
+│   ├── +page.svelte          # App entry point (routes between input/read modes)
+│   ├── +layout.svelte        # Global layout with dark mode
+│   └── layout.css            # Global styles, fonts, CSS variables
+└── lib/
+    ├── rsvp.ts               # ORP calculation and word-timing logic
+    ├── stores/settings.ts    # Persisted user settings store
+    ├── preset.ts             # Short educational preset texts
+    ├── presetInputs.ts       # Longer article excerpts
+    ├── utils.ts              # Shared utilities (cn, clamp, stripTrailing)
+    └── components/
+        ├── InputPage.svelte      # Text input screen
+        ├── ReadPage.svelte       # RSVP reader interface
+        ├── SettingsModal.svelte  # Settings dialog
+        ├── ControlHelpModal.svelte # Keyboard shortcuts reference
+        └── ui/                   # Headless UI primitives (button, dialog, slider, …)
+```
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `Space` | Play / Pause |
+| `←` / `→` | Previous / next word |
+| `↑` / `↓` | Increase / decrease WPM |
+| `Esc` | Return to input screen |
+| Mouse wheel | Scroll through words |
+
+## Deployment
+
+The project is configured for [Netlify](https://netlify.com). Push to your connected branch and Netlify will build and deploy automatically using the settings in `svelte.config.js`.
+
+## License
+
+MIT
