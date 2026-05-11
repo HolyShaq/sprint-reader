@@ -63,7 +63,7 @@ npm run preview   # preview the built output locally
 
 ### Deployment
 
-This project is deployed using [Wrangler](https://github.com/cloudflare/wrangler) and Cloudflare Pages.
+This project is deployed using [Wrangler](https://github.com/cloudflare/workers-sdk) and [Cloudflare Pages](https://pages.cloudflare.com/).
 ```bash
 npm run deploy
 ```
