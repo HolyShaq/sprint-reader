@@ -1,13 +1,19 @@
 <script lang="ts">
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { FONT_SIZES, FONT_STYLES, settings } from "$lib/stores/settings";
+  import {
+    FONT_SIZES,
+    FONT_STYLES,
+    resetSettings,
+    settings,
+  } from "$lib/stores/settings";
   import { innerWidth } from "svelte/reactivity/window";
   import { Checkbox } from "./ui/checkbox";
   import Input from "./ui/input/input.svelte";
   import Slider from "./ui/slider/slider.svelte";
   import { clamp } from "$lib/utils";
   import SettingsTooltip from "./SettingsTooltip.svelte";
+  import { RefreshCcw } from "@lucide/svelte";
 
   // Ideally, this should come from a store or props
   let { children, dimOnDrag = false } = $props();
@@ -57,7 +63,14 @@
       : ''}"
   >
     <Dialog.Header>
-      <Dialog.Title>Settings</Dialog.Title>
+      <Dialog.Title>
+        <div class="flex items-center gap-3">
+          Settings
+          <button onclick={resetSettings} class="hover:text-muted-foreground">
+            <RefreshCcw class="size-4" />
+          </button>
+        </div>
+      </Dialog.Title>
     </Dialog.Header>
 
     <div class="grid gap-4 py-4">

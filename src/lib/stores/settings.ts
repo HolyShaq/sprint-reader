@@ -44,7 +44,7 @@ export type Settings = {
 const defaultSettings = {
   fontStyle: "inter",
   fontSize: 128,
-  wordCenterOffset: 0,
+  wordCenterOffset: -100,
   wordChunksVisible: true,
   wordChunkSize: 5,
   progressBarVisible: true,
@@ -63,3 +63,4 @@ const defaultSettings = {
 };
 
 export const settings = persisted<Settings>("user-settings", defaultSettings);
+export const resetSettings = () => settings.set({ ...defaultSettings });
