@@ -4,7 +4,7 @@
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Trigger } from "$lib/components/ui/dialog";
   import { Slider } from "$lib/components/ui/slider";
-  import { innerWidth } from "svelte/reactivity/window";
+  import { innerHeight, innerWidth } from "svelte/reactivity/window";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { maxWPM, minWPM, settings, wpmStep } from "$lib/stores/settings";
   import {
@@ -61,6 +61,19 @@
   );
   const atFirstWord = $derived(textIndex === 0);
   const atLastWord = $derived(textIndex === textArray.length - 1);
+
+  const minGuidelineOffset = 200;
+  const defaultGuidelineOffset = 300;
+  const maxGuidelineOffset = 400;
+  const guidelineOffset = $derived.by(() => {
+    if (innerHeight.current) {
+      return Math.max(
+        minGuidelineOffset,
+        Math.min(maxGuidelineOffset, innerHeight.current * 0.35),
+      );
+    }
+    return defaultGuidelineOffset;
+  });
 
   $effect(() => {
     if (!browser) return;
@@ -261,24 +274,24 @@
     <div
       transition:fade={{ duration: 100 }}
       class="absolute top-1/2 w-full h-2 bg-border/50"
-      style:transform={`translateY(-${300}px)`}
+      style:transform={`translateY(-${guidelineOffset}px)`}
     ></div>
     <div
       transition:fade={{ duration: 100 }}
       class="absolute top-1/2 w-full h-2 bg-border/50"
-      style:transform={`translateY(${300}px)`}
+      style:transform={`translateY(${guidelineOffset}px)`}
     ></div>
     {#if $settings.verticalTicksVisible}
       <div
         transition:fade={{ duration: 100 }}
         class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2"
-        style:transform={`translate(${centerOffset}px, -${300 - 8}px)`}
+        style:transform={`translate(${centerOffset}px, -${guidelineOffset - 8}px)`}
         style:height={`${100}px`}
       ></div>
       <div
         transition:fade={{ duration: 100 }}
         class="absolute top-1/2 left-1/2 w-2 bg-border/50 -translate-x-1/2 -translate-y-full"
-        style:transform={`translate(${centerOffset}px, ${300}px)`}
+        style:transform={`translate(${centerOffset}px, ${guidelineOffset}px)`}
         style:height={`${100}px`}
       ></div>
     {/if}
@@ -287,7 +300,7 @@
   <!-- Progress Bar -->
   <div
     class="absolute w-full h-6 px-4 sm:px-12 gap-4 flex justify-end top-1/2 items-center"
-    style:transform={`translateY(${320}px)`}
+    style:transform={`translateY(${guidelineOffset + 20}px)`}
   >
     {#if controlPanelVisible}
       <div class="flex items-center mt-2">
