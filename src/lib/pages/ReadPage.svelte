@@ -227,7 +227,7 @@
     class="flex items-end gap-8 absolute top-1/2 left-1/2 -translate-y-1/2 whitespace-nowrap"
   >
     <div id="wordBefore" class="flex space-x-8">
-      {#if $settings.chunkVisible}
+      {#if $settings.wordChunksVisible}
         {#each wordsBefore as word}
           <h1 class="text-muted-foreground/50">{word}</h1>
         {/each}
@@ -246,7 +246,7 @@
     </h1>
 
     <div id="wordAfter" class="flex space-x-8">
-      {#if $settings.chunkVisible}
+      {#if $settings.wordChunksVisible}
         {#each wordsAfter as word}
           <h1 class="text-muted-foreground/50">{word}</h1>
         {/each}
