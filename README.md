@@ -13,6 +13,8 @@ A Rapid Serial Visual Presentation (RSVP) speed reading web app. SprintReader di
 
 🌐 Try it out [here](https://sprintreader.win/)!
 
+![Demo](https://github.com/HolyShaq/sprint-reader/blob/main/demo.gif)
+
 ## Features
 - **RSVP Reader** — word-by-word display with ORP highlighting and adjustable speed (50–1000 WPM)
 - **Dynamic timing** — automatic delays after punctuation (commas, periods, etc.) for natural pacing
