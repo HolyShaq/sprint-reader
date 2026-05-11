@@ -45,7 +45,7 @@ const defaultSettings = {
   fontStyle: "inter",
   fontSize: 128,
   wordCenterOffset: -100,
-  wordChunksVisible: true,
+  wordChunksVisible: false,
   wordChunkSize: 5,
   progressBarVisible: true,
   progressTextVisible: true,
