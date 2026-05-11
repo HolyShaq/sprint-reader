@@ -64,7 +64,7 @@
     >
       <div class="flex items-center justify-between">
         <div class="flex gap-4 items-center">
-          <h1 class="text-2xl font-bold">ReadMeFast</h1>
+          <h1 class="text-2xl font-bold">SprintReader</h1>
           <Button
             onclick={handleGeneratePresetPress}
             variant="outline"
@@ -114,7 +114,7 @@
     <div class="h-full w-px bg-border"></div>
 
     <!-- Github -->
-    <a target="_blank" href="https://github.com/HolyShaq/readmefast">
+    <a target="_blank" href="https://github.com/HolyShaq/sprint-reader">
       <span class="hidden sm:inline hover:underline">Source on Github</span>
       <Github class="sm:hidden" />
     </a>
