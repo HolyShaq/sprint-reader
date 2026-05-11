@@ -10,7 +10,8 @@
   import Textarea from "$lib/components/ui/textarea/textarea.svelte";
   import { getRandomPreset } from "$lib/preset";
   import { settings } from "$lib/stores/settings";
-  import { Menu, Sparkles, Github, UserRound, HandCoins } from "@lucide/svelte";
+  import { Menu, Sparkle, Github, UserRound, HandCoins } from "@lucide/svelte";
+  import { getRandomPresetInput } from "$lib/utils";
   import { onDestroy, onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
   import { fade, fly } from "svelte/transition";
@@ -44,6 +45,14 @@
     if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
   });
+
+  const handleGeneratePresetPress = () => {
+    let newPresetInput = text;
+    while (text == newPresetInput) {
+      newPresetInput = getRandomPresetInput();
+    }
+    text = newPresetInput;
+  };
 </script>
 
 <div class="fixed inset-0 flex flex-col">
@@ -54,14 +63,14 @@
       class="w-full mx-8 max-w-xl flex flex-col gap-4 bg-card border-border rounded-xl border p-6"
     >
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
+        <div class="flex gap-4 items-center">
           <h1 class="text-2xl font-bold">ReadMeFast</h1>
           <Button
-            onclick={generateRandomPreset}
-            variant="ghost"
-            class="rounded-full p-0 w-8 h-8"
+            onclick={handleGeneratePresetPress}
+            variant="outline"
+            size="icon"
           >
-            <Sparkles class="size-4" />
+            <Sparkle />
           </Button>
         </div>
         <SettingsModal>
@@ -96,19 +105,31 @@
     transition:fade={{ duration: 100 }}
     class="flex items-center justify-center sm:justify-end gap-4 px-4 py-2 text-xs font-medium text-muted-foreground"
   >
-    <span class="hidden sm:inline">Made by HolyShaq</span>
-    <UserRound class="sm:hidden" />
+    <!-- Portfolio -->
+    <a href="https://acehalili-portfolio.vercel.app/" target="_blank">
+      <span class="hidden sm:inline hover:underline">Made by HolyShaq</span>
+      <UserRound class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
-    <span class="hidden sm:inline"
-      >Source on <a href="https://github.com/HolyShaq/bits-ui">GitHub</a></span
-    >
-    <Github class="sm:hidden" />
+
+    <!-- Github -->
+    <a target="_blank" href="https://github.com/HolyShaq/readmefast">
+      <span class="hidden sm:inline hover:underline">Source on Github</span>
+      <Github class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
-    <span class="hidden sm:inline"
-      >Support me on <a href="https://ko-fi.com/holysaq">Ko-fi</a></span
-    >
-    <HandCoins class="sm:hidden" />
+
+    <!-- Ko-fi -->
+    <a href="https://ko-fi.com/holyshaq" target="_blank">
+      <span class="hidden sm:inline hover:underline">Support me on Ko-fi</span>
+      <HandCoins class="sm:hidden" />
+    </a>
+
     <div class="h-full w-px bg-border"></div>
+
+    <!-- Mode Toggle -->
     <ModeToggle />
   </div>
 </div>

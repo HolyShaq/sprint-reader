@@ -7,10 +7,20 @@
   import { innerWidth } from "svelte/reactivity/window";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
   import { settings } from "$lib/stores/settings";
-  import { Menu, X } from "@lucide/svelte";
+  import {
+    ChevronLeft,
+    ChevronRight,
+    CircleQuestionMark,
+    Menu,
+    Pause,
+    Play,
+    X,
+  } from "@lucide/svelte";
   import clsx from "clsx";
   import { onDestroy, onMount } from "svelte";
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
+  import ControlHelpModal from "$lib/components/ControlHelpModal.svelte";
+  import PopoverTrigger from "$lib/components/ui/popover/popover-trigger.svelte";
 
   interface Props {
     text: string;
@@ -19,6 +29,7 @@
   let { text, onBack }: Props = $props();
 
   let textIndex = $state(0);
+  let wpmVisible = $state(false);
   const textArray = $derived(text.trim().split(/\s+/));
   const currentWord = $derived(textArray[textIndex] ?? "");
 
@@ -27,21 +38,29 @@
   const orpLetter = $derived(currentWord[orpIndex]);
   const secondHalf = $derived(currentWord.slice(orpIndex + 1));
 
-  const chunkSize = $derived($settings.chunkVisible ? $settings.chunkSize : 0);
-  const wordsBefore = $derived(
-    textArray.slice(Math.max(0, textIndex - chunkSize), textIndex) ?? [],
-  );
-  const wordsAfter = $derived(
-    textArray.slice(textIndex + 1, textIndex + chunkSize + 1) ?? [],
-  );
-
   const isMobile = $derived.by(() => {
     if (innerWidth.current) {
       return innerWidth.current < 640;
     }
     return false;
   });
+
+  const wordChunkSize = $derived(
+    isMobile || !$settings.wordChunksVisible ? 0 : $settings.wordChunkSize,
+  );
+  const wordsBefore = $derived(
+    textArray.slice(Math.max(0, textIndex - wordChunkSize), textIndex) ?? [],
+  );
+  const wordsAfter = $derived(
+    textArray.slice(textIndex + 1, textIndex + wordChunkSize + 1) ?? [],
+  );
+
   const centerOffset = $derived(isMobile ? 0 : $settings.wordCenterOffset);
+  const controlPanelVisible = $derived(
+    isMobile ? true : $settings.controlPanelVisible,
+  );
+  const atFirstWord = $derived(textIndex === 0);
+  const atLastWord = $derived(textIndex === textArray.length - 1);
 
   $effect(() => {
     if (!browser) return;
@@ -90,31 +109,84 @@
     );
   };
 
+  // Utility Functions for controlling reader
+  const goToPrevWord = () => {
+    textIndex = Math.max(0, textIndex - 1);
+  };
+
+  const goToNextWord = () => {
+    textIndex = Math.min(textArray.length - 1, textIndex + 1);
+  };
+
+  const togglePlay = () => {
+    isPlaying = !isPlaying;
+    if (isPlaying) nextWord();
+    else if (nextWordTimeout) {
+      clearTimeout(nextWordTimeout);
+      nextWordTimeout = null;
+    }
+  };
+
+  const increaseWPM = () => {
+    $settings.wpm = $settings.wpm + 10;
+  };
+
+  const decreaseWPM = () => {
+    $settings.wpm = $settings.wpm - 10;
+  };
+
+  let wpmVisibilityTimeout: number | null = null;
+  const setupWPMVisibilityTimeout = () => {
+    if (wpmVisibilityTimeout) clearTimeout(wpmVisibilityTimeout);
+    wpmVisibilityTimeout = setTimeout(() => (wpmVisible = false), 1000);
+  };
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.code === "ArrowLeft") {
-      textIndex = Math.max(0, textIndex - 1);
+      goToPrevWord();
     } else if (event.code === "ArrowRight") {
-      textIndex = Math.min(textArray.length - 1, textIndex + 1);
+      goToNextWord();
     } else if (event.code === "Space") {
-      isPlaying = !isPlaying;
-      if (isPlaying) nextWord();
-      else if (nextWordTimeout) {
-        clearTimeout(nextWordTimeout);
-        nextWordTimeout = null;
-      }
+      event.preventDefault();
+      togglePlay();
     } else if (event.code === "Escape") {
       onBack();
+    } else if (event.code === "ArrowUp") {
+      wpmVisible = true;
+      increaseWPM();
+      setupWPMVisibilityTimeout();
+    } else if (event.code === "ArrowDown") {
+      wpmVisible = true;
+      decreaseWPM();
+      setupWPMVisibilityTimeout();
+    }
+  };
+
+  // Handle Mouse Wheel Scroll
+  let lastScrollTime = 0;
+  const scrollDelay = 10; // Milliseconds between allowed scroll-steps
+
+  const handleWheel = (event: WheelEvent) => {
+    const now = Date.now();
+    if (now - lastScrollTime < scrollDelay) return;
+
+    if (Math.abs(event.deltaY) > 5) {
+      // Threshold to ignore tiny movements
+      if (event.deltaY > 0) goToNextWord();
+      else goToPrevWord();
+      lastScrollTime = now;
     }
   };
 
   onMount(() => {
     if (!browser) return;
     document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("wheel", handleWheel, { passive: false });
   });
 
   onDestroy(() => {
     if (!browser) return;
     document.removeEventListener("keydown", handleKeyDown);
+    window.removeEventListener("wheel", handleWheel);
     if (nextWordTimeout) clearTimeout(nextWordTimeout);
   });
 </script>
@@ -212,9 +284,50 @@
 
   <!-- Progress Bar -->
   <div
-    class="absolute w-full h-6 px-12 gap-4 flex justify-end top-1/2 items-center"
+    class="absolute w-full h-6 px-4 sm:px-12 gap-4 flex justify-end top-1/2 items-center"
     style:transform={`translateY(${320}px)`}
   >
+    {#if controlPanelVisible}
+      <div class="flex items-center mt-2">
+        <Button
+          onclick={goToPrevWord}
+          variant="ghost"
+          size="icon"
+          class={clsx(
+            isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
+            atFirstWord ? "pointer-events-none opacity-50" : "cursor-pointer",
+          )}
+        >
+          <ChevronLeft />
+        </Button>
+        <Button
+          onclick={togglePlay}
+          variant="ghost"
+          size="icon"
+          class="cursor-pointer {isPlaying
+            ? 'text-accent-foreground/20'
+            : 'text-accent-foreground'}"
+        >
+          {#if !isPlaying}
+            <Play />
+          {:else}
+            <Pause />
+          {/if}
+        </Button>
+        <Button
+          onclick={goToNextWord}
+          variant="ghost"
+          size="icon"
+          class={clsx(
+            isPlaying ? "text-accent-foreground/20" : "text-accent-foreground",
+            atLastWord ? "pointer-events-none opacity-50" : "cursor-pointer",
+          )}
+        >
+          <ChevronRight />
+        </Button>
+      </div>
+    {/if}
+
     {#if $settings.progressBarVisible}
       <div class="flex-grow mt-2" transition:fade={{ duration: 100 }}>
         <Slider
@@ -232,11 +345,43 @@
     {#if $settings.progressTextVisible}
       <span
         transition:fade={{ duration: 100 }}
-        class="whitespace-nowrap {isPlaying
+        class="mt-2 whitespace-nowrap {isPlaying
           ? 'text-muted'
           : ''} transition-colors duration-100"
         >{textIndex + 1} / {textArray.length}</span
       >
     {/if}
   </div>
+
+  <div class="absolute bottom-2 left-2">
+    <ControlHelpModal>
+      <PopoverTrigger
+        openOnHover
+        openDelay={100}
+        closeDelay={100}
+        class={clsx(
+          isPlaying ? "pointer-events-none" : "",
+          buttonVariants({
+            variant: "ghost",
+            class: "size-8 rounded-full",
+          }),
+        )}
+      >
+        <CircleQuestionMark
+          class="{isPlaying
+            ? 'text-muted-foreground/20'
+            : 'text-muted-foreground'} size-6"
+        />
+      </PopoverTrigger>
+    </ControlHelpModal>
+  </div>
+
+  {#if wpmVisible}
+    <div
+      transition:fly={{ y: 16, duration: 100 }}
+      class="absolute bottom-4 right-4"
+    >
+      {$settings.wpm} wpm
+    </div>
+  {/if}
 </div>

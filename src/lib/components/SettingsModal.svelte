@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { FONT_SIZES, settings } from "$lib/stores/settings";
+  import { FONT_SIZES, FONT_STYLES, settings } from "$lib/stores/settings";
   import { innerWidth } from "svelte/reactivity/window";
   import { Checkbox } from "./ui/checkbox";
   import Input from "./ui/input/input.svelte";
@@ -12,22 +12,8 @@
   // Ideally, this should come from a store or props
   let { children, dimOnDrag = false } = $props();
 
-  const fonts = [
-    { value: "sans-serif", label: "Sans Serif" },
-    { value: "inter", label: "Inter" },
-    { value: "roboto", label: "Roboto" },
-    { value: "open-sans", label: "Open Sans" },
-    { value: "source-sans-3", label: "Source Sans 3" },
-    { value: "helvetica", label: "Helvetica" },
-    { value: "arial", label: "Arial" },
-    { value: "verdana", label: "Verdana" },
-    { value: "georgia", label: "Georgia" },
-    { value: "times-new-roman", label: "Times New Roman" },
-    { value: "courier-new", label: "Courier New" },
-  ];
-
   const triggerContent = $derived(
-    fonts.find((f) => f.value === $settings.fontStyle)?.label ??
+    FONT_STYLES.find((f) => f.value === $settings.fontStyle)?.label ??
       "Select a font",
   );
 
@@ -96,12 +82,18 @@
               bind:value={$settings.fontStyle}
             >
               <Select.Trigger class="w-full">
-                {triggerContent}
+                <span style="font-family: {$settings.fontStyle};">
+                  {triggerContent}
+                </span>
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
-                  {#each fonts as font (font.value)}
-                    <Select.Item value={font.value} label={font.label}>
+                  {#each FONT_STYLES as font (font.value)}
+                    <Select.Item
+                      style="font-family: {font.value};"
+                      value={font.value}
+                      label={font.label}
+                    >
                       {font.label}
                     </Select.Item>
                   {/each}
@@ -280,48 +272,57 @@
             </div>
           </div>
 
-          <div class="grid flex-1 gap-3">
-            <div class="flex items-center space-x-2">
-              <Checkbox
-                id="chunkVisible"
-                bind:checked={$settings.chunkVisible}
-                class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
-              />
-              <label
-                for="chunkVisible"
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                <div class="flex items-center gap-2">Chunk Display
-                  <SettingsTooltip text="Display the words surrounding the current word" />
-                </div>
-              </label>
-            </div>
-            {#if $settings.chunkVisible}
-              <div
-                class="ml-6 grid sm:grid-cols-2 gap-4 items-center space-x-2 animate-in slide-in-from-top-1 fade-in duration-200"
-              >
-                <div class="grid gap-1.5">
+          {#if !isMobile}
+            <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 items-start">
+              <div class="flex flex-1 items-center space-x-2">
+                <Checkbox
+                  id="controlPanel"
+                  bind:checked={$settings.controlPanelVisible}
+                  class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                />
+                <label
+                  for="controlPanel"
+                  class="text-sm font-medium leading-none"
+                >
+                  Control Panel</label
+                >
+              </div>
+
+              <div class="grid flex-1 gap-3">
+                <div class="flex items-center space-x-2">
+                  <Checkbox
+                    id="wordChunkVisibile"
+                    bind:checked={$settings.wordChunksVisible}
+                    class="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                  />
                   <label
-                    for="chunkSize"
-                    class="text-xs font-medium text-muted-foreground"
+                    for="wordChunkVisibile"
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    <div class="flex items-center gap-2">Chunk Size
-                      <SettingsTooltip text="Number of words to display around the current word" />
+                    <div class="flex items-center gap-2">
+                      Word Chunks
+                      <SettingsTooltip
+                        text="Display the words surrounding the current word"
+                      />
                     </div>
                   </label>
-                  <Input
-                    id="chunkSize"
-                    type="number"
-                    min="1"
-                    max="10"
-                    step="1"
-                    bind:value={$settings.chunkSize}
-                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                  />
                 </div>
+                {#if $settings.wordChunksVisible}
+                  <div class="pl-6">
+                    <Input
+                      id="wordChunkSize"
+                      type="number"
+                      step="1"
+                      min="1"
+                      max="6"
+                      bind:value={$settings.wordChunkSize}
+                      class="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    />
+                  </div>
+                {/if}
               </div>
-            {/if}
-          </div>
+            </div>
+          {/if}
         </div>
       </div>
 
@@ -344,8 +345,11 @@
               for="uniformWordTiming"
               class="text-sm font-medium leading-none"
             >
-              <div class="flex items-center gap-2">Dynamic Word Timing
-                <SettingsTooltip text="Delay the timing for the next word on punctuations" />
+              <div class="flex items-center gap-2">
+                Dynamic Word Timing
+                <SettingsTooltip
+                  text="Delay the timing for the next word on punctuations"
+                />
               </div>
             </label>
           </div>
@@ -359,7 +363,8 @@
                   for="softStop"
                   class="text-xs font-medium text-muted-foreground"
                 >
-                  <div class="flex items-center gap-2">Soft Stop Mult.
+                  <div class="flex items-center gap-2">
+                    Soft Stop Mult.
                     <SettingsTooltip text="Delay for ',' and ';'" />
                   </div>
                 </label>
@@ -376,7 +381,8 @@
                   for="hardStop"
                   class="text-xs font-medium text-muted-foreground"
                 >
-                  <div class="flex items-center gap-2">Hard Stop Mult.
+                  <div class="flex items-center gap-2">
+                    Hard Stop Mult.
                     <SettingsTooltip text="Delay for '.', '!', and '?'" />
                   </div>
                 </label>
