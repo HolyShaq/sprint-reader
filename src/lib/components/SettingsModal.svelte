@@ -154,7 +154,7 @@
                 <div class="flex items-center gap-2">
                   Offset
                   <SettingsTooltip
-                    text="Offset of the word from the center of the viewport (a little bit to the left is optional)"
+                    text="Offset of the word from the center of the viewport (a little bit to the left is ideal)"
                   />
                 </div>
               </label>
