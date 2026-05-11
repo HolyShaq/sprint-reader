@@ -4,8 +4,11 @@
   import {
     FONT_SIZES,
     FONT_STYLES,
+    maxWPM,
+    minWPM,
     resetSettings,
     settings,
+    wpmStep,
   } from "$lib/stores/settings";
   import { innerWidth } from "svelte/reactivity/window";
   import { Checkbox } from "./ui/checkbox";
@@ -425,9 +428,9 @@
             <Slider
               id="wpm"
               type="single"
-              min={50}
-              max={1000}
-              step={50}
+              min={minWPM}
+              max={maxWPM}
+              step={wpmStep}
               bind:value={$settings.wpm}
               class="flex h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
             />

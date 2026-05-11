@@ -1,5 +1,9 @@
 import { persisted } from "svelte-persisted-store";
 
+export const minWPM = 50;
+export const maxWPM = 1000;
+export const wpmStep = 50;
+
 export const FONT_STYLES = [
   // System Fonts
   { value: "arial", label: "Arial" },
@@ -33,8 +37,6 @@ export type Settings = {
   controlPanelVisible: boolean;
   centerOnOrp: boolean;
   orpHighlight: boolean;
-  chunkVisible: boolean;
-  chunkSize: number;
   dynamicWordTiming: boolean;
   softStopMultiplier: number;
   hardStopMultiplier: number;
@@ -54,8 +56,6 @@ const defaultSettings = {
   controlPanelVisible: true,
   centerOnOrp: true,
   orpHighlight: true,
-  chunkVisible: false,
-  chunkSize: 5,
   dynamicWordTiming: true,
   softStopMultiplier: 1.5,
   hardStopMultiplier: 2.5,

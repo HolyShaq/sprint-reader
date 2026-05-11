@@ -6,7 +6,7 @@
   import { Slider } from "$lib/components/ui/slider";
   import { innerWidth } from "svelte/reactivity/window";
   import { getORPIndexFromLength, getDelayMultiplier } from "$lib/rsvp";
-  import { settings } from "$lib/stores/settings";
+  import { maxWPM, minWPM, settings, wpmStep } from "$lib/stores/settings";
   import {
     ChevronLeft,
     ChevronRight,
@@ -128,11 +128,13 @@
   };
 
   const increaseWPM = () => {
-    $settings.wpm = $settings.wpm + 10;
+    if ($settings.wpm >= maxWPM) return;
+    $settings.wpm = $settings.wpm + wpmStep;
   };
 
   const decreaseWPM = () => {
-    $settings.wpm = $settings.wpm - 10;
+    if ($settings.wpm <= minWPM) return;
+    $settings.wpm = $settings.wpm - wpmStep;
   };
 
   let wpmVisibilityTimeout: number | null = null;
