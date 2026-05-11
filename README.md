@@ -11,7 +11,7 @@
 
 A Rapid Serial Visual Presentation (RSVP) speed reading web app. SprintReader displays text one word at a time in a fixed position, eliminating eye movement and highlighting each word's **Optimal Recognition Point (ORP)** — the letter where the brain recognizes words fastest.
 
-🌐 Try it out [here](https://readmefast.netlify.app/)!
+🌐 Try it out [here](https://sprintreader.win/)!
 
 ## Features
 - **RSVP Reader** — word-by-word display with ORP highlighting and adjustable speed (50–1000 WPM)
@@ -61,9 +61,12 @@ npm run build
 npm run preview   # preview the built output locally
 ```
 
-## Deployment
+### Deployment
 
-The project is configured for [Netlify](https://netlify.com). Push to your connected branch and Netlify will build and deploy automatically using the settings in `svelte.config.js`.
+This project is deployed using [Wrangler](https://github.com/cloudflare/wrangler) and Cloudflare Pages.
+```bash
+npm run deploy
+```
 
 ## License
 
