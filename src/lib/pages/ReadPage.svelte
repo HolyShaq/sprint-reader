@@ -353,28 +353,30 @@
     {/if}
   </div>
 
-  <div class="absolute bottom-2 left-2">
-    <ControlHelpModal>
-      <PopoverTrigger
-        openOnHover
-        openDelay={100}
-        closeDelay={100}
-        class={clsx(
-          isPlaying ? "pointer-events-none" : "",
-          buttonVariants({
-            variant: "ghost",
-            class: "size-8 rounded-full",
-          }),
-        )}
-      >
-        <CircleQuestionMark
-          class="{isPlaying
-            ? 'text-muted-foreground/20'
-            : 'text-muted-foreground'} size-6"
-        />
-      </PopoverTrigger>
-    </ControlHelpModal>
-  </div>
+  {#if !isMobile}
+    <div class="absolute bottom-2 left-2">
+      <ControlHelpModal>
+        <PopoverTrigger
+          openOnHover
+          openDelay={100}
+          closeDelay={100}
+          class={clsx(
+            isPlaying ? "pointer-events-none" : "",
+            buttonVariants({
+              variant: "ghost",
+              class: "size-8 rounded-full",
+            }),
+          )}
+        >
+          <CircleQuestionMark
+            class="{isPlaying
+              ? 'text-muted-foreground/20'
+              : 'text-muted-foreground'} size-6"
+          />
+        </PopoverTrigger>
+      </ControlHelpModal>
+    </div>
+  {/if}
 
   {#if wpmVisible}
     <div
